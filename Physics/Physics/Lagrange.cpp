@@ -2,26 +2,26 @@
 
 //Lagrange's Formula
 
-float dotProduct(Vector3 A, Vector3 B) {
+float dotProduct(Vector3Lagrange A, Vector3Lagrange B) {
 	return ((A.x * B.x)+(A.y * B.y)+(A.z * B.z));
 }
 
-Vector3 MultiplyVecByFloat(Vector3 A, float input) {
+Vector3Lagrange MultiplyVecByFloat(Vector3Lagrange A, float input) {
 	A.x = A.x * input;
 	A.y = A.y * input;
 	A.z = A.z * input;
 	return A;
 }
 
-Vector3 SubtractVecByVec(Vector3 A, Vector3 B) {
+Vector3Lagrange SubtractVecByVec(Vector3Lagrange A, Vector3Lagrange B) {
 	A.x = A.x - B.x;
 	A.y = A.y - B.y;
 	A.z = A.z - B.z;
 	return A;
 }
 
-Vector3 CrossProduct(Vector3 A, Vector3 B) {
-	Vector3 result;
+Vector3Lagrange CrossProduct(Vector3Lagrange A, Vector3Lagrange B) {
+	Vector3Lagrange result;
 
 	result.x = A.y * B.z - A.z * B.y;
 	result.y = A.z * B.x - A.x * B.z;
@@ -30,7 +30,7 @@ Vector3 CrossProduct(Vector3 A, Vector3 B) {
 	return result;
 }
 
-bool CompareVectors(Vector3 A, Vector3 B) {
+bool CompareVectors(Vector3Lagrange A, Vector3Lagrange B) {
 
 	if (A.x != B.x) {
 		return false;
@@ -46,13 +46,13 @@ bool CompareVectors(Vector3 A, Vector3 B) {
 }
 
 void LagrangeSolver() {
-	Vector3 A;
-	Vector3 B;
-	Vector3 C;
+	Vector3Lagrange A;
+	Vector3Lagrange B;
+	Vector3Lagrange C;
 
 	//Used for result compare
-	Vector3 RightSide;
-	Vector3 LeftSide;
+	Vector3Lagrange RightSide;
+	Vector3Lagrange LeftSide;
 
 	Console_Clear();
 	wcout << "[ Lagrange's Formula ]\n\nInput Vector Values\n = Vector 1 =\n X: ";
