@@ -2,4 +2,4 @@
 #include "ConsoleController.h"
 #include "Lagrange.h"
 
-void MainMenu();
+void MainMenu(int argc, char** argv);

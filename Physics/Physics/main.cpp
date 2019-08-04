@@ -1,3 +1,4 @@
+#include "Graphics.h"
 #include <iostream>
 
 #include "ConsoleController.h"
@@ -5,11 +6,11 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
 	Banner();
 
 	while (true){
-		MainMenu();
+		MainMenu(argc, argv);
 	}
 
 	system("pause");
