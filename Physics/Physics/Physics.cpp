@@ -1,25 +1,13 @@
 #include "Physics.h"
 
 
-float dotproduct(vector<float> VECA, vector<float> VECB)
+float dotproduct(Vector3 VECA, Vector3 VECB)
 {
 	float product = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		product += VECA.at(i) * VECB.at(i);
-	}
+	product += VECA.x * VECB.x;
+	product += VECA.y * VECB.y;
+	product += VECA.z * VECB.z;
 	return (product);
-}
-
-vector<float> Xproduct(vector<float> VECA, vector<float> VECB)
-{
-	vector<float> product = { 0, 0, 0 };
-
-	product.at(0) = VECA.at(1) * VECB.at(2) - VECA.at(2) * VECB.at(1);
-	product.at(1) = VECA.at(2) * VECB.at(0) - VECA.at(0) * VECB.at(2);
-	product.at(2) = VECA.at(0) * VECB.at(1) - VECA.at(1) * VECB.at(0);
-
-	return(product);
 }
 
 vector<float> mutiplay(float times, vector<float> OG)
@@ -33,25 +21,29 @@ vector<float> mutiplay(float times, vector<float> OG)
 	return (ans);
 }
 
-vector<float> vsubtract(vector<float> first, vector<float> second)
+Vector3 vsubtract(Vector3 first, Vector3 second)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		first.at(i) = first.at(i) - second.at(i);
-	}
+	first.x = first.x - second.x;
+	first.y = first.y - second.y;
+	first.z = first.z - second.z;
 	return(first);
 }
 
-void TvPF()
+void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Triangle)
 {
-	vector<float>planeNormal{ 1, 0, 0 };
-	vector<float>planePos{ 0, 1, 0 };
-	vector<float>T0{ 2,0,0, };
-	vector<float>T1{ -1,0,0 };
-	vector<float>T2{ -1,1,0 };
-	float ans1 = dotproduct(planeNormal, vsubtract(planePos, T0)) / dotproduct(planeNormal, vsubtract(T1, T0));
-	float ans2 = dotproduct(planeNormal, vsubtract(planePos, T1)) / dotproduct(planeNormal, vsubtract(T2, T1));
-	float ans3 = dotproduct(planeNormal, vsubtract(planePos, T2)) / dotproduct(planeNormal, vsubtract(T0, T2));
+	//vector<float>planeNormal{ 1, 0, 0 };
+	//vector<float>planePos{ 0, 1, 0 };
+	//vector<float>T0{ 2,0,0, };
+	//vector<float>T1{ -1,0,0 };
+	//vector<float>T2{ -1,1,0 };
+
+	//float ans1 = dotproduct(planeNormal, vsubtract(planePos, T0)) / dotproduct(planeNormal, vsubtract(T1, T0));
+	//float ans2 = dotproduct(planeNormal, vsubtract(planePos, T1)) / dotproduct(planeNormal, vsubtract(T2, T1));
+	//float ans3 = dotproduct(planeNormal, vsubtract(planePos, T2)) / dotproduct(planeNormal, vsubtract(T0, T2));
+
+	float ans1 = dotproduct(planeNormal, vsubtract(plane, Triangle.firstPoint)) / dotproduct(planeNormal, vsubtract(Triangle.secondPoint, Triangle.firstPoint));
+	float ans2 = dotproduct(planeNormal, vsubtract(plane, Triangle.secondPoint)) / dotproduct(planeNormal, vsubtract(Triangle.thirdPoint, Triangle.secondPoint));
+	float ans3 = dotproduct(planeNormal, vsubtract(plane, Triangle.thirdPoint)) / dotproduct(planeNormal, vsubtract(Triangle.firstPoint, Triangle.thirdPoint));
 	vector<float>anspool{ ans1, ans2, ans3 };
 
 	bool ans = false;
@@ -70,8 +62,6 @@ void TvPF()
 			ans = true;
 		}
 	}
-
-
 
 	if (ans == true)
 	{

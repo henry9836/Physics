@@ -10,28 +10,10 @@
 
 #include "ConsoleController.h"
 #include "ShaderLoader.h"
+#include "Physics.h"
+#include "Util.h"
 
 using namespace std;
-
-
-struct Vector3 {
-	float x;
-	float y;
-	float z;
-};
-
-struct Vector2 {
-	float x;
-	float y;
-};
-
-struct TriangleData {
-	Vector2 firstPoint = {-9999,-9999};
-	Vector2 secondPoint = { -9999,-9999 };
-	Vector2 thirdPoint = { -9999,-9999 };
-};
-
-
 
 class GameObject {
 public:
@@ -68,12 +50,6 @@ public:
 	vector<GameObject*> GameObjects;
 	bool drawingTriangle = true;
 
-};
-
-class Util {
-public:
-	vector<int> ScreenSize = { 500,500 };
-	vector<float> MousePosition = { 0.0,0.0 };
 };
 
 void InitGL(int argc, char** argv);

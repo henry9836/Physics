@@ -16,7 +16,45 @@ void MainMenu(int argc, char** argv) {
 		LSvPF();
 	}
 	else if (input == "4") {
-		TvPF();
+		Vector3 plane;
+		Vector3 planeNormal;
+		TriangleData triangle;
+		Console_Clear();
+		wcout << L" -= Plane Position =-" << endl << L"X:";
+		cin >> plane.x;
+		wcout << L"Y:";
+		cin >> plane.y;
+		wcout << L"Z:";
+		cin >> plane.z;
+
+		wcout << L" -= Plane Normal =-" << endl << L"X:";
+		cin >> planeNormal.x;
+		wcout << L"Y:";
+		cin >> planeNormal.y;
+		wcout << L"Z:";
+		cin >> planeNormal.z;
+
+		wcout << L" -= Triangle =-" << endl;
+		wcout << L" [ First Point ] " << endl << L"X:";
+		cin >> triangle.firstPoint.x;
+		wcout << L"Y:";
+		cin >> triangle.firstPoint.y;
+		wcout << L"Z:";
+		cin >> triangle.firstPoint.z;
+		wcout << L" [ Second Point ] " << endl << L"X:";
+		cin >> triangle.secondPoint.x;
+		wcout << L"Y:";
+		cin >> triangle.secondPoint.y;
+		wcout << L"Z:";
+		cin >> triangle.secondPoint.z;
+		wcout << L" [ Third Point ] " << endl << L"X:";
+		cin >> triangle.thirdPoint.x;
+		wcout << L"Y:";
+		cin >> triangle.thirdPoint.y;
+		wcout << L"Z:";
+		cin >> triangle.thirdPoint.z;
+
+		TrianglePlaneFunction(plane, planeNormal, triangle);
 	}
 	else if (input == "5") {
 		InitGL(argc, argv);

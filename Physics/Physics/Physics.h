@@ -2,18 +2,17 @@
 #include <iostream>
 #include <windows.h>
 #include <vector>
+#include "Util.h"
 
 using namespace std;
 
-float dotproduct(vector<float> VECA, vector<float> VECB);
-
-vector<float> Xproduct(vector<float> VECA, vector<float> VECB);
+float dotproduct(Vector3 VECA, Vector3 VECB);
 
 vector<float> mutiplay(float times, vector<float> OG);
 
-vector<float> vsubtract(vector<float> first, vector<float> second);
+Vector3 vsubtract(Vector3 first, Vector3 second);
 
-void TvPF();
+void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Triangle);
 
 void LSvPF();
 

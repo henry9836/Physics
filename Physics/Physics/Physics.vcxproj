@@ -160,6 +160,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="ShaderLoader.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\triangle.fs" />
