@@ -87,9 +87,6 @@ void keyboardSpecial(int key, int, int) {
 
 }
 
-void Update() {
-	
-}
 
 void Render() {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -100,6 +97,10 @@ void Render() {
 	}
 
 	glutSwapBuffers();
+}
+
+void Update() {
+	Render();
 }
 
 void InitGL(int argc, char **argv)
@@ -121,9 +122,6 @@ void InitGL(int argc, char **argv)
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
 
 	glClearColor(1.0, 0.0, 0.0, 1.0);
 
@@ -160,37 +158,6 @@ GameObject::GameObject(TriangleData positions, vector<GameObject*>* sceneList)
 	this->vertices[1] = { this->triangleData.secondPoint.x, this->triangleData.secondPoint.y, 0, };
 	this->vertices[2] = { this->triangleData.thirdPoint.x, this->triangleData.thirdPoint.y, 0, };
 
-	this->program = ShaderLoader::CreateProgram("Resources/triangle.vs", "Resources/triangle.fs");
-
-	glGenVertexArrays(1, &this->VAO);
-	glBindVertexArray(this->VAO);
-
-	glGenBuffers(1, &this->EBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(this->indices), this->indices, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &this->VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		8 * sizeof(GLfloat),
-		(GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glVertexAttribPointer(
-		1,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		8 * sizeof(GLfloat),
-		(GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(1);
-
 	//push this gameobject to a scene
 
 	sceneList->push_back(this);
@@ -203,15 +170,16 @@ GameObject::~GameObject()
 
 void GameObject::Render()
 {
-	glClearColor(1.0, 1.0, 0.0, 1.0);
 
-	glUseProgram(this->program);
-	
-	glBindVertexArray(this->VAO);
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBegin(GL_TRIANGLES);
 
-	glBindVertexArray(0);
-	glUseProgram(0);
+	glColor3f(0.0f, 0.0f, 1.0f);
+
+	glVertex3f(this->triangleData.firstPoint.x, -this->triangleData.firstPoint.y, 0);
+	glVertex3f(this->triangleData.secondPoint.x, -this->triangleData.secondPoint.y, 0);
+	glVertex3f(this->triangleData.thirdPoint.x, -this->triangleData.thirdPoint.y, 0);
+
+	glEnd();
 }
 
 
