@@ -1,7 +1,6 @@
 #include "Graphics.h"
 
 Scene mScene;
-Util Utilty;
 
 Vector2 ScreenSize = {500,500};
 Vector2 MousePosition;

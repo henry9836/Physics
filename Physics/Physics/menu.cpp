@@ -1,5 +1,6 @@
 ﻿#include "Graphics.h"
 #include "menu.h"
+#include "Util.h"
 
 void MainMenu(int argc, char** argv) {
 	Console_Clear();

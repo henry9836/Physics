@@ -1,6 +1,5 @@
 #include "Physics.h"
 
-
 float dotproduct(Vector3 VECA, Vector3 VECB)
 {
 	float product = 0;
@@ -79,13 +78,13 @@ void LSvPF()
 {
 
 	float ans = 0;
-	vector<float>planeNormal{ 1, 0, 0 };
-	vector<float>planePos{ 0, 1, 0 };
+	Vector3 planeNormal = {0,0,0};
+	Vector3 planePosition = {0,0,0};
 
-	vector<float>P0{ 2,0,0 };
-	vector<float>P1{ -1,0,0 };
+	Vector3 P0 = {0,0,0};
+	Vector3 P1 = {0,0,0};
 
-	ans = dotproduct(planeNormal, vsubtract(planePos, P0)) / dotproduct(planeNormal, vsubtract(P1, P0));
+	ans = dotproduct(planeNormal, vsubtract(planePosition, P0)) / dotproduct(planeNormal, vsubtract(P1, P0));
 
 	if (ans == 0)
 	{
@@ -120,12 +119,13 @@ void PVP()
 
 	float ans = 0;
 	float distance = 0;
-	vector<float>planeNormal{ 1, 0, 0 };
-	vector<float>planePos{ 0, 1, 0 };
-	vector<float>pointPos{ Xpos, 1, 1 };
 
-	distance = dotproduct(planeNormal, planePos);
-	ans = dotproduct(planeNormal, pointPos) - distance;
+	Vector3 planeNormal = {0,0,0};
+	Vector3 planePosition = { 0,0,0 };
+	Vector3 pointPosition = { 0,0,0 };
+
+	distance = dotproduct(planeNormal, planePosition);
+	ans = dotproduct(planeNormal, pointPosition) - distance;
 	if (ans == 0)
 	{
 		wcout << L"ON_PLANE" << endl;

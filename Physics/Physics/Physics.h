@@ -2,6 +2,7 @@
 #include <iostream>
 #include <windows.h>
 #include <vector>
+#include "Graphics.h"
 #include "Util.h"
 
 using namespace std;
