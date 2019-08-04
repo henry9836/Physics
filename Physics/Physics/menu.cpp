@@ -9,7 +9,16 @@ void MainMenu(int argc, char** argv) {
 	if (input == "1") {
 		LagrangeSolver();
 	}
-	if (input == "5") {
+	else if (input == "2") {
+		PVP();
+	}
+	else if (input == "3") {
+		LSvPF();
+	}
+	else if (input == "4") {
+		TvPF();
+	}
+	else if (input == "5") {
 		InitGL(argc, argv);
 	}
 	else if (input == "99") {

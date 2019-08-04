@@ -150,12 +150,20 @@
     <ClCompile Include="Lagrange.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="ShaderLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConsoleController.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="Lagrange.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="Physics.h" />
+    <ClInclude Include="ShaderLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\triangle.fs" />
+    <None Include="Resources\triangle.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

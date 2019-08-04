@@ -10,6 +10,15 @@ Vector2 Line;
 
 bool mouseDisable = false; //helps against double click
 
+void CutATriangle(GameObject &triangle, GameObject &line) {
+
+	Vector3 abovePlane[] = { 0,0,0,0 };
+	Vector3 belowPlane[] = { 0,0,0,0 };
+
+
+
+}
+
 void mouse(int button, int state, int x, int y) { //Click
 
 	if (button == 0) {
@@ -34,7 +43,7 @@ void mouse(int button, int state, int x, int y) { //Click
 				Triangle.thirdPoint.y = MousePosition.y;
 				wcout << L"Set third point for triangle at: " << Triangle.thirdPoint.x << ":" << Triangle.thirdPoint.y << endl;
 				
-				mScene.GameObjects.push_back(new GameObject(Triangle));
+				mScene.GameObjects.push_back(new GameObject(Triangle, &mScene.GameObjects));
 				wcout << L"Triangle Made" << endl;
 			}
 		}
@@ -144,10 +153,49 @@ GameObject::GameObject(Vector2 positions)
 	this->type = GameObject::LINE;
 }
 
-GameObject::GameObject(TriangleData positions)
+GameObject::GameObject(TriangleData positions, vector<GameObject*>* sceneList)
 {
 	this->type = GameObject::TRIANGLE;
 	this->triangleData = positions;
+	this->vertices[0] = { this->triangleData.firstPoint.x, this->triangleData.firstPoint.y, 0,};
+	this->vertices[1] = { this->triangleData.secondPoint.x, this->triangleData.secondPoint.y, 0, };
+	this->vertices[2] = { this->triangleData.thirdPoint.x, this->triangleData.thirdPoint.y, 0, };
+
+	this->program = ShaderLoader::CreateProgram("Resources/triangle.vs", "Resources/triangle.fs");
+
+	glGenVertexArrays(1, &this->VAO);
+	glBindVertexArray(this->VAO);
+
+	glGenBuffers(1, &this->EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(this->indices), this->indices, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &this->VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		8 * sizeof(GLfloat),
+		(GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(
+		1,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		8 * sizeof(GLfloat),
+		(GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	//push this gameobject to a scene
+
+	sceneList->push_back(this);
+
 }
 
 GameObject::~GameObject()
@@ -156,6 +204,15 @@ GameObject::~GameObject()
 
 void GameObject::Render()
 {
+	glClearColor(1.0, 1.0, 0.0, 1.0);
+
+	glUseProgram(this->program);
+	
+	glBindVertexArray(this->VAO);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
 }
 
 
