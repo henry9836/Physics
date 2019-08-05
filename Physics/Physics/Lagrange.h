@@ -1,11 +1,7 @@
 #pragma once
 #include "ConsoleController.h"
+#include "Util.h"
 
-struct Vector3Lagrange
-{
-	float x;
-	float y;
-	float z;
-};
+Vector3 CrossProduct(Vector3 A, Vector3 B);
 
 void LagrangeSolver();

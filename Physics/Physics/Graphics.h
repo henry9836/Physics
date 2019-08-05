@@ -12,6 +12,7 @@
 #include "ShaderLoader.h"
 #include "Physics.h"
 #include "Util.h"
+#include "Lagrange.h"
 
 using namespace std;
 
@@ -22,8 +23,8 @@ public:
 		TRIANGLE,
 		LINE
 	};
-	GameObject(LineData positions, vector<GameObject*>* sceneList); //line
-	GameObject(TriangleData positions, vector<GameObject*>* sceneList); //triangle
+	GameObject(LineData positions); //line
+	GameObject(TriangleData positions); //triangle
 	~GameObject();
 	objectType type;
 	
@@ -31,11 +32,13 @@ public:
 
 	LineData getLineData();
 	TriangleData getTriangleData();
+	LineData lineData;
+	TriangleData triangleData;
+	bool killMe = false;
 
 private:
 
-	LineData lineData;
-	TriangleData triangleData;
+	
 	Vector3 color = {0,0,0};
 
 };
@@ -48,3 +51,5 @@ public:
 };
 
 void InitGL(int argc, char** argv);
+
+void CutATriangle(GameObject* triangle, GameObject* line);
