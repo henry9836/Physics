@@ -15,6 +15,6 @@ Vector3 vsubtract(Vector3 first, Vector3 second);
 
 void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Triangle);
 
-void LSvPF();
+float LinevPlane(Vector3 planePosition, Vector3 planeNormal, LineData linePositions);
 
 void PVP();

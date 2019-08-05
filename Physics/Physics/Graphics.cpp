@@ -5,16 +5,29 @@ Scene mScene;
 Vector2 ScreenSize = {500,500};
 Vector2 MousePosition;
 TriangleData Triangle;
-Vector2 Line;
+LineData Line;
 
 bool mouseDisable = false; //helps against double click
 
-void CutATriangle(GameObject &triangle, GameObject &line) {
+void CutATriangle(GameObject* triangle, GameObject* line) {
 
-	Vector3 abovePlane[] = { 0,0,0,0 };
-	Vector3 belowPlane[] = { 0,0,0,0 };
+	vector<Vector3> Below;
+	vector<Vector3> Above;
+	vector<Vector2> splitPositions;
+
+	//split off easy triangle
+
+	//assign first vert
+
+	Above.push_back(triangle->getTriangleData().firstPoint);
+
+	//find a intersect point
+	
+	LinevPlane();
 
 
+	//create two more triangles
+	
 
 }
 
@@ -41,9 +54,23 @@ void mouse(int button, int state, int x, int y) { //Click
 				Triangle.thirdPoint.x = MousePosition.x;
 				Triangle.thirdPoint.y = MousePosition.y;
 				wcout << L"Set third point for triangle at: " << Triangle.thirdPoint.x << ":" << Triangle.thirdPoint.y << endl;
-				
+
 				mScene.GameObjects.push_back(new GameObject(Triangle, &mScene.GameObjects));
 				wcout << L"Triangle Made" << endl;
+			}
+			else if (Line.firstPoint.x == -9999) {
+				Line.firstPoint.x = MousePosition.x;
+				Line.firstPoint.y = MousePosition.y;
+				wcout << L"Set first point for line at: " << Line.firstPoint.x << ":" << Line.firstPoint.y << endl;
+			}
+			else if (Line.secondPoint.x == -9999) {
+				Line.secondPoint.x = MousePosition.x;
+				Line.secondPoint.y = MousePosition.y;
+				wcout << L"Set second point for line at: " << Line.secondPoint.x << ":" << Line.secondPoint.y << endl;
+
+				mScene.GameObjects.push_back(new GameObject(Line, &mScene.GameObjects));
+
+				wcout << L"Line Made" << endl;
 			}
 		}
 
@@ -77,8 +104,20 @@ void keyboard(unsigned char key, int, int) {
 	}
 	else if (key == 108 || key == 76) { //L Key
 		wcout << L"RESET LINE" << endl;
-		Line.x = -9999;
-		Line.y = -9999;
+		Line.firstPoint.x = -9999;
+		Line.secondPoint.x = -9999;
+		for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+		{
+			if (mScene.GameObjects.at(i)->type == GameObject::LINE)
+			{
+				mScene.GameObjects.at(i)->~GameObject();
+				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+			}
+		}
+	}
+	else if (key == 13 || key == 32) { // Return/Space Key
+		wcout << L"Cut!" << endl;
+		CutATriangle(&Triangle, &Line);
 	}
 
 }
@@ -105,6 +144,7 @@ void Update() {
 
 void InitGL(int argc, char **argv)
 {
+	srand(static_cast <unsigned> (time(0)));
 	Console_OutputLog(L"OpenGL Service Setting Up...", LOGINFO);
 
 	glutInit(&argc, argv);
@@ -145,22 +185,25 @@ void InitGL(int argc, char **argv)
 
 }
 
-GameObject::GameObject(Vector2 positions)
+GameObject::GameObject(LineData positions, vector<GameObject*>* sceneList)
 {
 	this->type = GameObject::LINE;
+	this->lineData = positions;
+
+	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
 
 GameObject::GameObject(TriangleData positions, vector<GameObject*>* sceneList)
 {
 	this->type = GameObject::TRIANGLE;
 	this->triangleData = positions;
-	this->vertices[0] = { this->triangleData.firstPoint.x, this->triangleData.firstPoint.y, 0,};
-	this->vertices[1] = { this->triangleData.secondPoint.x, this->triangleData.secondPoint.y, 0, };
-	this->vertices[2] = { this->triangleData.thirdPoint.x, this->triangleData.thirdPoint.y, 0, };
+	
+	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
+
 
 	//push this gameobject to a scene
 
-	sceneList->push_back(this);
+	//sceneList->push_back(this);
 
 }
 
@@ -171,15 +214,38 @@ GameObject::~GameObject()
 void GameObject::Render()
 {
 
-	glBegin(GL_TRIANGLES);
+	if (this->type == GameObject::TRIANGLE) {
 
-	glColor3f(0.0f, 0.0f, 1.0f);
+		glBegin(GL_TRIANGLES);
 
-	glVertex3f(this->triangleData.firstPoint.x, -this->triangleData.firstPoint.y, 0);
-	glVertex3f(this->triangleData.secondPoint.x, -this->triangleData.secondPoint.y, 0);
-	glVertex3f(this->triangleData.thirdPoint.x, -this->triangleData.thirdPoint.y, 0);
+		glColor3f(this->color.x, this->color.y, this->color.z);
 
-	glEnd();
+		glVertex3f(this->triangleData.firstPoint.x, -this->triangleData.firstPoint.y, 0);
+		glVertex3f(this->triangleData.secondPoint.x, -this->triangleData.secondPoint.y, 0);
+		glVertex3f(this->triangleData.thirdPoint.x, -this->triangleData.thirdPoint.y, 0);
+
+		glEnd();
+	}
+	else if (this->type == GameObject::LINE) {
+		glBegin(GL_LINES);
+
+		glColor3f(this->color.x, this->color.y, this->color.z);
+
+		glVertex3f(this->lineData.firstPoint.x, -this->lineData.firstPoint.y, 0);
+		glVertex3f(this->lineData.secondPoint.x, -this->lineData.secondPoint.y, 0);
+
+		glEnd();
+	}
+}
+
+LineData GameObject::getLineData()
+{
+	return this->lineData;
+}
+
+TriangleData GameObject::getTriangleData()
+{
+	return this->triangleData;
 }
 
 

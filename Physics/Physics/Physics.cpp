@@ -74,12 +74,10 @@ void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Tria
 }
 
 
-void LSvPF()
+float LinevPlane(Vector3 planePosition, Vector3 planeNormal, LineData linePositions)
 {
 
 	float ans = 0;
-	Vector3 planeNormal = {0,0,0};
-	Vector3 planePosition = {0,0,0};
 
 	Vector3 P0 = {0,0,0};
 	Vector3 P1 = {0,0,0};
@@ -107,7 +105,7 @@ void LSvPF()
 		wcout << L"intersection between the 2 points" << endl;
 	}
 	system("pause");
-
+	return ans;
 }
 
 void PVP()

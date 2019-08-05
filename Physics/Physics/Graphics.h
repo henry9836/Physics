@@ -22,26 +22,21 @@ public:
 		TRIANGLE,
 		LINE
 	};
-	GameObject(Vector2 positions); //line
+	GameObject(LineData positions, vector<GameObject*>* sceneList); //line
 	GameObject(TriangleData positions, vector<GameObject*>* sceneList); //triangle
 	~GameObject();
 	objectType type;
 	
 	void Render();
 
+	LineData getLineData();
+	TriangleData getTriangleData();
+
 private:
 
+	LineData lineData;
 	TriangleData triangleData;
-	GLuint program = NULL;
-	GLuint texture = NULL;
-	GLuint VAO = NULL;
-	GLuint VBO = NULL;
-	GLuint EBO = NULL;
-	Vector3 vertices[24] = { 0.0f,0.0f,0.0f, 1.0f,0.0f,0.0f,  0.0f, 0.0f,
-							 0.0f,0.0f,0.0f, 0.0f,1.0f,0.0f,  0.0f, 1.0f,
-							 0.0f,0.0f,0.0f, 0.0f,0.0f,1.0f,  1.0f, 1.0f, };
-	GLuint indices[6] = {0,1,2,
-						 0,2,3};
+	Vector3 color = {0,0,0};
 
 };
 

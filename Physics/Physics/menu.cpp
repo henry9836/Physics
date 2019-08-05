@@ -14,7 +14,10 @@ void MainMenu(int argc, char** argv) {
 		PVP();
 	}
 	else if (input == "3") {
-		LSvPF();
+		Vector3 plane = { 0,0,0 };
+		Vector3 planeNormal = {0,0,0};
+		LineData line;
+		LinevPlane(plane, planeNormal, line);
 	}
 	else if (input == "4") {
 		Vector3 plane;
