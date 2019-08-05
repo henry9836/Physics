@@ -4,3 +4,4 @@
 #### Features:
 
 - Lagrange's Theorem
+- Triangle Slicing
