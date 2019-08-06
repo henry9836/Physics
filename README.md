@@ -2,6 +2,9 @@
 ###### By Henry Oliver
 
 #### Features:
-
+	
 - Lagrange's Theorem
-- Triangle Slicing
+- Plane vs Point Function
+- Line Segment vs Plane Function
+- Triangle vs Plane Function
+- Triangle Slicing with OpenGL
