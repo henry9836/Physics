@@ -2,7 +2,7 @@
 
 Scene mScene;
 
-Vector2 ScreenSize = {500,500};
+IntVector2 ScreenSize = {500,500};
 Vector2 MousePosition;
 TriangleData Triangle;
 LineData Line;
@@ -263,6 +263,10 @@ void keyboard(unsigned char key, int, int) {
 		}
 		
 	}
+	else if (key == 27 || key == 81 || key == 113) {
+		Console_OutputLog(L"Exitting OpenGL...", LOGINFO);
+		glutLeaveMainLoop();
+	}
 
 }
 
@@ -312,6 +316,8 @@ void InitGL(int argc, char **argv)
 	//Start
 
 	Console_OutputLog(L"OpenGL Service Starting...", LOGINFO);
+
+	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
 	glutDisplayFunc(Render);
 

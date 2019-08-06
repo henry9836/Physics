@@ -152,7 +152,9 @@ inline void Console_OutputLog(std::wstring log, int type) {
 }
 
 inline void Banner() {
-	_setmode(_fileno(stdout), _O_U16TEXT);
+	int a = _setmode(_fileno(stdout), _O_U16TEXT);
+	if (a == -1)
+		wcout << L"Cannot set console to UTF-16 mode" << endl;
 	srand((unsigned int)time(NULL));
 	int color = rand() % 15 + 1;
 	Console_ColoredTEXT(L"===============================================================\n", color);

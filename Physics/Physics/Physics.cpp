@@ -30,15 +30,6 @@ Vector3 vsubtract(Vector3 first, Vector3 second)
 
 void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Triangle)
 {
-	//vector<float>planeNormal{ 1, 0, 0 };
-	//vector<float>planePos{ 0, 1, 0 };
-	//vector<float>T0{ 2,0,0, };
-	//vector<float>T1{ -1,0,0 };
-	//vector<float>T2{ -1,1,0 };
-
-	//float ans1 = dotproduct(planeNormal, vsubtract(planePos, T0)) / dotproduct(planeNormal, vsubtract(T1, T0));
-	//float ans2 = dotproduct(planeNormal, vsubtract(planePos, T1)) / dotproduct(planeNormal, vsubtract(T2, T1));
-	//float ans3 = dotproduct(planeNormal, vsubtract(planePos, T2)) / dotproduct(planeNormal, vsubtract(T0, T2));
 
 	float ans1 = dotproduct(planeNormal, vsubtract(plane, Triangle.firstPoint)) / dotproduct(planeNormal, vsubtract(Triangle.secondPoint, Triangle.firstPoint));
 	float ans2 = dotproduct(planeNormal, vsubtract(plane, Triangle.secondPoint)) / dotproduct(planeNormal, vsubtract(Triangle.thirdPoint, Triangle.secondPoint));
@@ -68,9 +59,8 @@ void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Tria
 	}
 	else
 	{
-		wcout << L"Collision if false" << endl;
+		wcout << L"Collision is false" << endl;
 	}
-	system("pause");
 }
 
 
@@ -79,10 +69,9 @@ float LinevPlane(Vector3 planePosition, Vector3 planeNormal, LineData linePositi
 
 	float ans = 0;
 
-	Vector3 P0 = {0,0,0};
-	Vector3 P1 = {0,0,0};
+	ans = dotproduct(planeNormal, vsubtract(planePosition, linePositions.firstPoint)) / dotproduct(planeNormal, vsubtract(linePositions.secondPoint, linePositions.firstPoint));
 
-	ans = dotproduct(planeNormal, vsubtract(planePosition, P0)) / dotproduct(planeNormal, vsubtract(P1, P0));
+	//wcout << ans;
 
 	if (ans == 0)
 	{
@@ -104,23 +93,16 @@ float LinevPlane(Vector3 planePosition, Vector3 planeNormal, LineData linePositi
 	{
 		wcout << L"intersection between the 2 points" << endl;
 	}
-	system("pause");
+	else {
+		wcout << L"no intersection was found" << endl;
+	}
 	return ans;
 }
 
-void PVP()
+void PlanevPoint(Vector3 planePosition, Vector3 planeNormal, Vector3 pointPosition)
 {
-	wcout << L"what X position would you like " << endl;
-	wcout << L"(0 is on -1 is benind and 1 is infront)" << endl;
-	float Xpos;
-	cin >> Xpos;
-
 	float ans = 0;
 	float distance = 0;
-
-	Vector3 planeNormal = {0,0,0};
-	Vector3 planePosition = { 0,0,0 };
-	Vector3 pointPosition = { 0,0,0 };
 
 	distance = dotproduct(planeNormal, planePosition);
 	ans = dotproduct(planeNormal, pointPosition) - distance;
@@ -136,5 +118,4 @@ void PVP()
 	{
 		wcout << L"INFRONT" << endl;
 	}
-	system("pause");
 }

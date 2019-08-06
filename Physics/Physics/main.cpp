@@ -13,6 +13,5 @@ int main(int argc, char** argv) {
 		MainMenu(argc, argv);
 	}
 
-	system("pause");
 	return 0;
 }

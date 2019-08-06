@@ -52,6 +52,11 @@ struct Vector2 {
 	float y = 0.0f;
 };
 
+struct IntVector2 {
+	int x = 0;
+	int y = 0;
+};
+
 struct TriangleData {
 	Vector3 firstPoint =  { -9999, -9999, 0 };
 	Vector3 secondPoint = { -9999, -9999, 0 };

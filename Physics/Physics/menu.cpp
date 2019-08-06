@@ -11,12 +11,66 @@ void MainMenu(int argc, char** argv) {
 		LagrangeSolver();
 	}
 	else if (input == "2") {
-		PVP();
+		Vector3 plane = { 0,0,0 };
+		Vector3 planeNormal = { 0,0,0 };
+		Vector3 point = {0,0,0};
+		Console_Clear();
+		wcout << L" -= Plane Position =-" << endl << L"X:";
+		cin >> plane.x;
+		wcout << L"Y:";
+		cin >> plane.y;
+		wcout << L"Z:";
+		cin >> plane.z;
+
+		wcout << L" -= Plane Normal =-" << endl << L"X:";
+		cin >> planeNormal.x;
+		wcout << L"Y:";
+		cin >> planeNormal.y;
+		wcout << L"Z:";
+		cin >> planeNormal.z;
+
+		wcout << L" -= Point Position =-" << endl << L"X:";
+		cin >> point.x;
+		wcout << L"Y:";
+		cin >> point.y;
+		wcout << L"Z:";
+		cin >> point.z;
+
+		PlanevPoint(plane, planeNormal, point);
 	}
 	else if (input == "3") {
 		Vector3 plane = { 0,0,0 };
 		Vector3 planeNormal = {0,0,0};
 		LineData line;
+		Console_Clear();
+		wcout << L" -= Plane Position =-" << endl << L"X:";
+		cin >> plane.x;
+		wcout << L"Y:";
+		cin >> plane.y;
+		wcout << L"Z:";
+		cin >> plane.z;
+
+		wcout << L" -= Plane Normal =-" << endl << L"X:";
+		cin >> planeNormal.x;
+		wcout << L"Y:";
+		cin >> planeNormal.y;
+		wcout << L"Z:";
+		cin >> planeNormal.z;
+
+		wcout << L" -= Line =-" << endl;
+		wcout << L" [ First Point ] " << endl << L"X:";
+		cin >> line.firstPoint.x;
+		wcout << L"Y:";
+		cin >> line.firstPoint.y;
+		wcout << L"Z:";
+		cin >> line.firstPoint.z;
+		wcout << L" [ Second Point ] " << endl << L"X:";
+		cin >> line.secondPoint.x;
+		wcout << L"Y:";
+		cin >> line.secondPoint.y;
+		wcout << L"Z:";
+		cin >> line.secondPoint.z;
+
 		LinevPlane(plane, planeNormal, line);
 	}
 	else if (input == "4") {

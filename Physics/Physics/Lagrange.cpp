@@ -106,5 +106,4 @@ void LagrangeSolver() {
 	wcout << "The Left Vector is:  { " << LeftSide.x << ", " << LeftSide.y << ", " << LeftSide.z << " }\n";
 	wcout << "The Right Vector is: { " << RightSide.x << ", " << RightSide.y << ", " << RightSide.z << " }\n";
 
-	system("pause");
 }
