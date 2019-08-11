@@ -21,10 +21,13 @@ public:
 	enum objectType {
 		UNDEFINIED,
 		TRIANGLE,
-		LINE
+		LINE,
+		CAPSULE
 	};
+	
 	GameObject(LineData positions); //line
 	GameObject(TriangleData positions); //triangle
+	GameObject(CircleData inCircle1, CircleData inCircle2); //capsule
 	~GameObject();
 	objectType type;
 	
@@ -34,6 +37,7 @@ public:
 	TriangleData getTriangleData();
 	LineData lineData;
 	TriangleData triangleData;
+	CapsuleData capsuleData;
 	bool killMe = false;
 
 private:
@@ -45,11 +49,18 @@ private:
 
 class Scene {
 public:
+	enum scenes {
+		TRIANGLE,
+		CAPSULE
+	};
 	vector<GameObject*> GameObjects;
+	scenes currentScene = TRIANGLE;
 	bool drawingTriangle = true;
 
 };
 
-void InitGL(int argc, char** argv);
-
 void CutATriangle(GameObject* triangle, GameObject* line);
+
+void mouse(int button, int state, int x, int y);
+
+void InitGL(int argc, char** argv, Scene::scenes currentScene);

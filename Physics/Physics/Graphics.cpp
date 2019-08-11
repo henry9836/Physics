@@ -6,6 +6,10 @@ IntVector2 ScreenSize = {500,500};
 Vector2 MousePosition;
 TriangleData Triangle;
 LineData Line;
+CircleData FirstCircle;
+CircleData SecondCircle;
+CircleData ThirdCircle;
+CircleData FourthCircle;
 
 bool mouseDisable = false; //helps against double click
 
@@ -154,6 +158,23 @@ void CutATriangle(GameObject* triangle, GameObject* line) {
 
 }
 
+float circleSectionBuilder(CircleData* inCircle) {
+
+	float xDiff = (inCircle->centerPoint.x - MousePosition.x);
+	float yDiff = (inCircle->centerPoint.y - MousePosition.y);
+
+	if (xDiff < 0) {
+		xDiff *= -1;
+	}
+	if (yDiff < 0) {
+		yDiff *= -1;
+	}
+
+	float result = sqrt(pow(xDiff, 2) + pow(yDiff, 2));
+	wcout << "RADIUS: " << result << endl;
+	return result;
+}
+
 void mouse(int button, int state, int x, int y) { //Click
 
 	if (button == 0) {
@@ -162,38 +183,70 @@ void mouse(int button, int state, int x, int y) { //Click
 		if (!mouseDisable) {
 
 			wcout << L"Mouse X:" << MousePosition.x << L" Y:" << MousePosition.y << endl;
+			if (mScene.currentScene == Scene::TRIANGLE) {
+				if (Triangle.firstPoint.x == -9999) {
+					Triangle.firstPoint.x = MousePosition.x;
+					Triangle.firstPoint.y = MousePosition.y;
+					wcout << L"Set first point for triangle at: " << Triangle.firstPoint.x << ":" << Triangle.firstPoint.y << endl;
+				}
+				else if (Triangle.secondPoint.x == -9999) {
+					Triangle.secondPoint.x = MousePosition.x;
+					Triangle.secondPoint.y = MousePosition.y;
+					wcout << L"Set second point for triangle at: " << Triangle.secondPoint.x << ":" << Triangle.secondPoint.y << endl;
+				}
+				else if (Triangle.thirdPoint.x == -9999) {
+					Triangle.thirdPoint.x = MousePosition.x;
+					Triangle.thirdPoint.y = MousePosition.y;
+					wcout << L"Set third point for triangle at: " << Triangle.thirdPoint.x << ":" << Triangle.thirdPoint.y << endl;
 
-			if (Triangle.firstPoint.x == -9999) {
-				Triangle.firstPoint.x = MousePosition.x;
-				Triangle.firstPoint.y = MousePosition.y;
-				wcout << L"Set first point for triangle at: " << Triangle.firstPoint.x << ":" << Triangle.firstPoint.y << endl;
-			}
-			else if (Triangle.secondPoint.x == -9999) {
-				Triangle.secondPoint.x = MousePosition.x;
-				Triangle.secondPoint.y = MousePosition.y;
-				wcout << L"Set second point for triangle at: " << Triangle.secondPoint.x << ":" << Triangle.secondPoint.y << endl;
-			}
-			else if (Triangle.thirdPoint.x == -9999) {
-				Triangle.thirdPoint.x = MousePosition.x;
-				Triangle.thirdPoint.y = MousePosition.y;
-				wcout << L"Set third point for triangle at: " << Triangle.thirdPoint.x << ":" << Triangle.thirdPoint.y << endl;
+					mScene.GameObjects.push_back(new GameObject(Triangle));
+					wcout << L"Triangle Made" << endl;
+				}
+				else if (Line.firstPoint.x == -9999) {
+					Line.firstPoint.x = MousePosition.x;
+					Line.firstPoint.y = MousePosition.y;
+					wcout << L"Set first point for line at: " << Line.firstPoint.x << ":" << Line.firstPoint.y << endl;
+				}
+				else if (Line.secondPoint.x == -9999) {
+					Line.secondPoint.x = MousePosition.x;
+					Line.secondPoint.y = MousePosition.y;
+					wcout << L"Set second point for line at: " << Line.secondPoint.x << ":" << Line.secondPoint.y << endl;
 
-				mScene.GameObjects.push_back(new GameObject(Triangle));
-				wcout << L"Triangle Made" << endl;
-			}
-			else if (Line.firstPoint.x == -9999) {
-				Line.firstPoint.x = MousePosition.x;
-				Line.firstPoint.y = MousePosition.y;
-				wcout << L"Set first point for line at: " << Line.firstPoint.x << ":" << Line.firstPoint.y << endl;
-			}
-			else if (Line.secondPoint.x == -9999) {
-				Line.secondPoint.x = MousePosition.x;
-				Line.secondPoint.y = MousePosition.y;
-				wcout << L"Set second point for line at: " << Line.secondPoint.x << ":" << Line.secondPoint.y << endl;
+					mScene.GameObjects.push_back(new GameObject(Line));
 
-				mScene.GameObjects.push_back(new GameObject(Line));
+					wcout << L"Line Made" << endl;
+				}
+			}
+			else if (mScene.currentScene == Scene::CAPSULE) {
+				
+				MousePosition.y = -MousePosition.y;
 
-				wcout << L"Line Made" << endl;
+				if (FirstCircle.centerPoint.x == -9999) {
+					FirstCircle.centerPoint.x = MousePosition.x;
+					FirstCircle.centerPoint.y = MousePosition.y;
+				}
+				else if (FirstCircle.radius < 0.0f) {
+					FirstCircle.radius = circleSectionBuilder(&FirstCircle);
+				}
+				else if (SecondCircle.centerPoint.x == -9999) {
+					SecondCircle.centerPoint.x = MousePosition.x;
+					SecondCircle.centerPoint.y = MousePosition.y;
+					SecondCircle.radius = FirstCircle.radius;
+					mScene.GameObjects.push_back(new GameObject(FirstCircle, SecondCircle));
+				}
+				else if (ThirdCircle.centerPoint.x == -9999) {
+					ThirdCircle.centerPoint.x = MousePosition.x;
+					ThirdCircle.centerPoint.y = MousePosition.y;
+				}
+				else if (ThirdCircle.radius < 0.0f) {
+					ThirdCircle.radius = circleSectionBuilder(&ThirdCircle);
+				}
+				else if (FourthCircle.centerPoint.x == -9999) {
+					FourthCircle.centerPoint.x = MousePosition.x;
+					FourthCircle.centerPoint.y = MousePosition.y;
+					FourthCircle.radius = ThirdCircle.radius;
+					mScene.GameObjects.push_back(new GameObject(ThirdCircle, FourthCircle));
+				}
 			}
 		}
 
@@ -210,60 +263,61 @@ void mouseMovement(int x, int y) {
 
 void keyboard(unsigned char key, int, int) {
 	
+	if (mScene.currentScene == Scene::TRIANGLE) {
+		if (key == 116 || key == 84) { //T Key
+			Console_OutputLog(L"Reset Triangles", LOGINFO);
+			Triangle.firstPoint = { -9999, -9999,0 };
+			Triangle.secondPoint = { -9999, -9999,0 };
+			Triangle.thirdPoint = { -9999, -9999,0 };
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				if (mScene.GameObjects.at(i)->type == GameObject::TRIANGLE)
+				{
+					mScene.GameObjects.at(i)->~GameObject();
+					mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+					i--;
+				}
+			}
+		}
+		else if (key == 108 || key == 76) { //L Key
+			Console_OutputLog(L"Reset Line", LOGINFO);
+			Line.firstPoint.x = -9999;
+			Line.secondPoint.x = -9999;
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				if (mScene.GameObjects.at(i)->type == GameObject::LINE)
+				{
+					mScene.GameObjects.at(i)->~GameObject();
+					mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+					i--;
+				}
+			}
+		}
+		else if (key == 13 || key == 32) { // Return/Space Key
+			wcout << L"Cut!" << endl;
+			GameObject* tmpTriangle = NULL;
+			GameObject* tmpLine = NULL;
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				if (mScene.GameObjects.at(i)->type == GameObject::TRIANGLE) {
+					tmpTriangle = mScene.GameObjects.at(i);
+				}
+				if (mScene.GameObjects.at(i)->type == GameObject::LINE) {
+					tmpLine = mScene.GameObjects.at(i);
+				}
+			}
+			if (tmpTriangle != NULL && tmpLine != NULL) {
+				CutATriangle(tmpTriangle, tmpLine);
+				tmpTriangle = NULL;
+				delete tmpLine;
+			}
+			else {
+				Console_OutputLog(L"Could not find any valid triangles or lines to use", LOGWARN);
+			}
 
-	if (key == 116 || key == 84) { //T Key
-		Console_OutputLog(L"Reset Triangles", LOGINFO);
-		Triangle.firstPoint = { -9999, -9999,0 };
-		Triangle.secondPoint = { -9999, -9999,0 };
-		Triangle.thirdPoint = { -9999, -9999,0 };
-		for (size_t i = 0; i < mScene.GameObjects.size(); i++)
-		{
-			if (mScene.GameObjects.at(i)->type == GameObject::TRIANGLE)
-			{
-				mScene.GameObjects.at(i)->~GameObject();
-				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
-				i--;
-			}
 		}
 	}
-	else if (key == 108 || key == 76) { //L Key
-		Console_OutputLog(L"Reset Line", LOGINFO);
-		Line.firstPoint.x = -9999;
-		Line.secondPoint.x = -9999;
-		for (size_t i = 0; i < mScene.GameObjects.size(); i++)
-		{
-			if (mScene.GameObjects.at(i)->type == GameObject::LINE)
-			{
-				mScene.GameObjects.at(i)->~GameObject();
-				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
-				i--;
-			}
-		}
-	}
-	else if (key == 13 || key == 32) { // Return/Space Key
-		wcout << L"Cut!" << endl;
-		GameObject* tmpTriangle = NULL;
-		GameObject* tmpLine = NULL;
-		for (size_t i = 0; i < mScene.GameObjects.size(); i++)
-		{
-			if (mScene.GameObjects.at(i)->type == GameObject::TRIANGLE) {
-				tmpTriangle = mScene.GameObjects.at(i);
-			}
-			if (mScene.GameObjects.at(i)->type == GameObject::LINE) {
-				tmpLine = mScene.GameObjects.at(i);
-			}
-		}
-		if (tmpTriangle != NULL && tmpLine != NULL) {
-			CutATriangle(tmpTriangle, tmpLine);
-			tmpTriangle = NULL;
-			delete tmpLine;
-		}
-		else {
-			Console_OutputLog(L"Could not find any valid triangles or lines to use", LOGWARN);
-		}
-		
-	}
-	else if (key == 27 || key == 81 || key == 113) {
+	else if (key == 27 || key == 81 || key == 113) { //esc
 		Console_OutputLog(L"Exitting OpenGL...", LOGINFO);
 		glutLeaveMainLoop();
 	}
@@ -273,7 +327,6 @@ void keyboard(unsigned char key, int, int) {
 void keyboardSpecial(int key, int, int) {
 
 }
-
 
 void Render() {
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -290,8 +343,19 @@ void Update() {
 	Render();
 }
 
-void InitGL(int argc, char **argv)
+void InitGL(int argc, char** argv, Scene::scenes currentScene)
 {
+
+	mScene.currentScene = currentScene;
+
+	for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+	{
+
+		mScene.GameObjects.at(i)->~GameObject();
+		mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+		i--;
+	}
+
 	srand(static_cast <unsigned> (time(0)));
 	Console_OutputLog(L"OpenGL Service Setting Up...", LOGINFO);
 
@@ -350,11 +414,16 @@ GameObject::GameObject(TriangleData positions)
 	
 	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 
+}
 
-	//push this gameobject to a scene
+GameObject::GameObject(CircleData inCircle1, CircleData inCircle2)
+{
+	this->type = GameObject::CAPSULE;
+	
+	this->capsuleData.circle1 = inCircle1;
+	this->capsuleData.circle2 = inCircle2;
 
-	//sceneList->push_back(this);
-
+	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
 
 GameObject::~GameObject()
@@ -385,6 +454,54 @@ void GameObject::Render()
 		glVertex3f(this->lineData.secondPoint.x, -this->lineData.secondPoint.y, 0);
 
 		glEnd();
+	}
+	else if (this->type == GameObject::CAPSULE) {
+		
+
+		//Draw Circles
+
+		Console_OutputLog(L"DRAW A CAPSULE", LOGINFO);
+
+
+		//glBegin(GL_TRIANGLES);
+
+		glBegin(GL_TRIANGLE_FAN);
+
+		glColor3f(this->color.x, this->color.y, this->color.z);
+
+		//wcout << "Center Position: " << this->capsuleData.circle1.centerPoint.x << " : " << this->capsuleData.circle1.centerPoint.y << " " << endl;
+
+		//wcout << "Position: " << (this->capsuleData.circle1.centerPoint.x + std::cos(angle) * this->capsuleData.circle1.radius) << " : " << (this->capsuleData.circle1.centerPoint.y + std::sin(angle) * this->capsuleData.circle1.radius) << " r: " << this->capsuleData.circle1.radius << " Angle: " << angle << " " << endl;
+
+		//wcout << "Position: " << (this->capsuleData.circle2.centerPoint.x + std::cos(angle) * this->capsuleData.circle2.radius) << " : " << (this->capsuleData.circle2.centerPoint.y + std::sin(angle) * this->capsuleData.circle2.radius) << " r: " << this->capsuleData.circle2.radius << " Angle: " << angle << " " << endl;
+
+		glVertex3f(this->capsuleData.circle1.centerPoint.x, this->capsuleData.circle1.centerPoint.y, 0.0f);
+
+		for (int i = 0; i < 365; ++i) {
+			float angle = i * 3.1415926535897932384626433832795f / 180.0f;
+			glVertex3f((this->capsuleData.circle1.centerPoint.x + std::cos(angle) * this->capsuleData.circle1.radius), (this->capsuleData.circle1.centerPoint.y + std::sin(angle) * this->capsuleData.circle1.radius), 0);
+		}
+
+		glEnd();
+
+
+
+		glBegin(GL_TRIANGLE_FAN);
+
+		glColor3f(this->color.x, this->color.y, this->color.z);
+
+		glVertex3f(this->capsuleData.circle2.centerPoint.x, this->capsuleData.circle2.centerPoint.y, 0.0f);
+
+		for (int i = 0; i < 365; ++i) {
+			float angle = i * 3.1415926535897932384626433832795f / 180.0f;
+			glVertex3f((this->capsuleData.circle2.centerPoint.x + std::cos(angle) * this->capsuleData.circle2.radius), (this->capsuleData.circle2.centerPoint.y + std::sin(angle) * this->capsuleData.circle2.radius), 0);
+		}
+
+		glEnd();
+
+		//Draw Box
+
+		
 	}
 }
 

@@ -67,3 +67,13 @@ struct LineData {
 	Vector3 firstPoint =  { -9999, -9999, 0 };
 	Vector3 secondPoint = { -9999, -9999, 0 };
 };
+
+struct CircleData {
+	Vector3 centerPoint = { -9999, -9999, 0 };
+	float radius = -1.0f;
+};
+
+struct CapsuleData {
+	CircleData circle1;
+	CircleData circle2;
+};
