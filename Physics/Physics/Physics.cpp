@@ -119,3 +119,10 @@ void PlanevPoint(Vector3 planePosition, Vector3 planeNormal, Vector3 pointPositi
 		wcout << L"INFRONT" << endl;
 	}
 }
+
+Vector3 findPerpendicular(Vector3 pointA, Vector3 pointB) {
+	Vector3 dir = pointB - pointA;
+	dir = Vector3(dir.y, -dir.x, dir.z);
+	float length = sqrt((dir.x * dir.x)+(dir.y * dir.y));
+	return Vector3(dir.x/length,dir.y/length,dir.z);
+}

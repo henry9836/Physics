@@ -18,3 +18,5 @@ void TrianglePlaneFunction(Vector3 plane, Vector3 planeNormal, TriangleData Tria
 float LinevPlane(Vector3 planePosition, Vector3 planeNormal, LineData linePositions);
 
 void PlanevPoint(Vector3 planePosition, Vector3 planeNormal, Vector3 pointPosition);
+
+Vector3 findPerpendicular(Vector3 pointA, Vector3 pointB);

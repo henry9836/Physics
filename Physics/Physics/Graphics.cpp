@@ -317,7 +317,18 @@ void keyboard(unsigned char key, int, int) {
 
 		}
 	}
-	else if (key == 27 || key == 81 || key == 113) { //esc
+	else if (mScene.currentScene == Scene::CAPSULE) {
+		if (key == 27 || key == 114 || key == 82) { //esc/r to reset
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				mScene.GameObjects.at(i)->~GameObject();
+				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+				i--;
+			}
+		}
+		wcout << key << endl;
+	}
+	if (key == 27) { //esc
 		Console_OutputLog(L"Exitting OpenGL...", LOGINFO);
 		glutLeaveMainLoop();
 	}
@@ -460,10 +471,7 @@ void GameObject::Render()
 
 		//Draw Circles
 
-		Console_OutputLog(L"DRAW A CAPSULE", LOGINFO);
-
-
-		//glBegin(GL_TRIANGLES);
+		//Console_OutputLog(L"DRAW A CAPSULE", LOGINFO);
 
 		glBegin(GL_TRIANGLE_FAN);
 
@@ -499,9 +507,32 @@ void GameObject::Render()
 
 		glEnd();
 
+
 		//Draw Box
 
-		
+		glBegin(GL_TRIANGLES);
+
+		glColor3f(this->color.x, this->color.y, this->color.z);
+
+		//_A.x + _Perpendicular.x * _Radius, _A.y + _Perpendicular.y * _Radius , 0.0f,        1.0f, 1.0f, 1.0f,  0.0f, 0.0f,// Top - Left
+		//_A.x - _Perpendicular.x * _Radius, _A.y - _Perpendicular.y * _Radius, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,// Bot - Left
+
+		Vector3 Perpendicular = findPerpendicular(this->capsuleData.circle1.centerPoint, this->capsuleData.circle2.centerPoint);
+
+		//topleft
+		glVertex3f(this->capsuleData.circle1.centerPoint.x + Perpendicular.x * this->capsuleData.circle1.radius, this->capsuleData.circle1.centerPoint.y + Perpendicular.y * this->capsuleData.circle1.radius, 0.0f);
+		//topright
+		glVertex3f(this->capsuleData.circle2.centerPoint.x - Perpendicular.x * this->capsuleData.circle2.radius, this->capsuleData.circle2.centerPoint.y - Perpendicular.y * this->capsuleData.circle2.radius, 0.0f);
+		//bottomleft
+		glVertex3f(this->capsuleData.circle1.centerPoint.x - Perpendicular.x * this->capsuleData.circle1.radius, this->capsuleData.circle1.centerPoint.y - Perpendicular.y * this->capsuleData.circle1.radius, 0.0f);
+		//topright
+		glVertex3f(this->capsuleData.circle2.centerPoint.x - Perpendicular.x * this->capsuleData.circle2.radius, this->capsuleData.circle2.centerPoint.y - Perpendicular.y * this->capsuleData.circle2.radius, 0.0f);
+		//bottomright
+		glVertex3f(this->capsuleData.circle2.centerPoint.x + Perpendicular.x * this->capsuleData.circle2.radius, this->capsuleData.circle2.centerPoint.y + Perpendicular.y * this->capsuleData.circle2.radius, 0.0f);
+		//bottomright
+		glVertex3f(this->capsuleData.circle1.centerPoint.x + Perpendicular.x * this->capsuleData.circle1.radius, this->capsuleData.circle1.centerPoint.y + Perpendicular.y * this->capsuleData.circle1.radius, 0.0f);
+
+		glEnd();
 	}
 }
 
