@@ -14,7 +14,7 @@ CircleData FourthCircle;
 bool mouseDisable = false; //helps against double click
 
 void drawLineCapsuleDistance(CapsuleData capsule1, CapsuleData capsule2) {
-	float shortestDistance = 99999999999999;
+	float shortestDistance = 999999;
 
 	vector<CircleData> circles;
 	LineData collisonLine;
@@ -387,6 +387,14 @@ void keyboard(unsigned char key, int, int) {
 				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
 				i--;
 			}
+			FirstCircle.centerPoint.x = -9999;
+			SecondCircle.centerPoint.x = -9999;
+			ThirdCircle.centerPoint.x = -9999;
+			FourthCircle.centerPoint.x = -9999;
+			FirstCircle.radius = -9999;
+			SecondCircle.radius = -9999;
+			ThirdCircle.radius = -9999;
+			FourthCircle.radius = -9999;
 		}
 		else if (key == 13 || key == 32) {
 			CapsuleData tmp1, tmp2;
@@ -410,7 +418,7 @@ void keyboard(unsigned char key, int, int) {
 				drawLineCapsuleDistance(tmp1, tmp2);
 			}
 		}
-		wcout << key << endl;
+		//wcout << key << endl;
 	}
 	if (key == 27) { //esc
 		Console_OutputLog(L"Exitting OpenGL...", LOGINFO);
@@ -441,6 +449,8 @@ void Update() {
 void InitGL(int argc, char** argv, Scene::scenes currentScene)
 {
 
+	//Init/Reset Values
+
 	mScene.currentScene = currentScene;
 
 	for (size_t i = 0; i < mScene.GameObjects.size(); i++)
@@ -450,6 +460,17 @@ void InitGL(int argc, char** argv, Scene::scenes currentScene)
 		mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
 		i--;
 	}
+
+	FirstCircle.centerPoint.x = -9999;
+	SecondCircle.centerPoint.x = -9999;
+	ThirdCircle.centerPoint.x = -9999;
+	FourthCircle.centerPoint.x = -9999;
+	FirstCircle.radius = -9999;
+	SecondCircle.radius = -9999;
+	ThirdCircle.radius = -9999;
+	FourthCircle.radius = -9999;
+
+	//Start OpenGL
 
 	srand(static_cast <unsigned> (time(0)));
 	Console_OutputLog(L"OpenGL Service Setting Up...", LOGINFO);
@@ -470,7 +491,7 @@ void InitGL(int argc, char** argv, Scene::scenes currentScene)
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
-	glClearColor(1.0, 0.0, 0.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	//Start
 
