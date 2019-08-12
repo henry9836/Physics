@@ -8,3 +8,4 @@
 - Line Segment vs Plane Function
 - Triangle vs Plane Function
 - Triangle Slicing with OpenGL
+- Find Shortest Distance between two capsules
