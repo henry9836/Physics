@@ -23,9 +23,21 @@ struct Vector3 {
 		return Vector3{ x + B.x, y + B.y, z + B.z };
 	};
 
+	inline Vector3 operator + (float B) {
+		return Vector3{ x + B, y + B, z + B};
+	};
+
 	inline Vector3 operator / (Vector3 B) {
 		return Vector3{ x / B.x, y / B.y, z / B.z };
 	};
+
+	inline Vector3 operator / (float B) {
+		return Vector3{ x / B, y / B, z / B };
+	};
+
+	inline Vector3 operator * (Vector3 B) {
+		return Vector3{ x * B.x, y * B.y, z * B.z };
+	}
 
 	inline Vector3 operator * (float B) {
 		return Vector3{ x * B, y * B, z * B };

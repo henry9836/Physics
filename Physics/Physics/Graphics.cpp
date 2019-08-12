@@ -13,6 +13,68 @@ CircleData FourthCircle;
 
 bool mouseDisable = false; //helps against double click
 
+void drawLineCapsuleDistance(CapsuleData capsule1, CapsuleData capsule2) {
+	float shortestDistance = 99999999999999;
+
+	vector<CircleData> circles;
+	LineData collisonLine;
+
+	circles.push_back(capsule1.circle1);
+	circles.push_back(capsule1.circle2);
+	circles.push_back(capsule2.circle1);
+	circles.push_back(capsule2.circle2);
+
+
+	//Invert ys
+	for (size_t i = 0; i < circles.size(); i++)
+	{
+		circles[i].centerPoint.y *= -1;
+	}
+
+	for (size_t i = 0; i < 2; i++)
+	{
+		for (size_t j = 0; j < 2; j++)
+		{
+			float distance = (sqrt(pow((circles[i].centerPoint.x - circles[j + 2].centerPoint.x), 2) + pow((circles[i].centerPoint.y - circles[j + 2].centerPoint.y), 2)));
+
+			if (distance < shortestDistance) {
+				shortestDistance = distance;
+				collisonLine.firstPoint = circles[i].centerPoint;
+				collisonLine.secondPoint = circles[j + 2].centerPoint;
+				Console_OutputLog(L"Distance Updated", LOGINFO);
+			}
+		}
+	}
+
+	if (capsule1.circle1.radius + capsule2.circle1.radius >= shortestDistance)
+	{
+		std::wcout << "Collision Detected\n";
+	}
+
+	Vector3 dir = circles[1].centerPoint - circles[0].centerPoint;
+
+	float magintude = sqrt(pow(dir.x, 2) + pow(dir.y, 2));
+
+	Vector3 a = collisonLine.secondPoint - circles[0].centerPoint;
+	Vector3 b = ((circles[1].centerPoint - circles[0].centerPoint) / magintude);
+
+	float t = sqrt((a.x * b.x) + (a.y * b.y));
+
+	if (t <= 0) {
+		t = 0;
+	}
+	else if (t > magintude)
+	{
+		t = magintude;
+	}
+
+	collisonLine.firstPoint = (collisonLine.secondPoint);
+	collisonLine.secondPoint = (circles[0].centerPoint + (b * t));
+
+	mScene.GameObjects.push_back(new GameObject(collisonLine, 3.0f));
+
+}
+
 void CutATriangle(GameObject* triangle, GameObject* line) {
 
 	Console_OutputLog(L"Attempting To Slice Triangle", LOGINFO);
@@ -212,7 +274,7 @@ void mouse(int button, int state, int x, int y) { //Click
 					Line.secondPoint.y = MousePosition.y;
 					wcout << L"Set second point for line at: " << Line.secondPoint.x << ":" << Line.secondPoint.y << endl;
 
-					mScene.GameObjects.push_back(new GameObject(Line));
+					mScene.GameObjects.push_back(new GameObject(Line, 1.0f));
 
 					wcout << L"Line Made" << endl;
 				}
@@ -326,6 +388,28 @@ void keyboard(unsigned char key, int, int) {
 				i--;
 			}
 		}
+		else if (key == 13 || key == 32) {
+			CapsuleData tmp1, tmp2;
+
+			bool gotCaps = false;
+
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				if (mScene.GameObjects[i]->type == GameObject::CAPSULE) {
+					if (tmp1.circle1.centerPoint.x == -9999) {
+						tmp1 = mScene.GameObjects[i]->capsuleData;
+					}
+					else {
+						tmp2 = mScene.GameObjects[i]->capsuleData;
+						gotCaps = true;
+					}
+				}
+			}
+
+			if (gotCaps) {
+				drawLineCapsuleDistance(tmp1, tmp2);
+			}
+		}
 		wcout << key << endl;
 	}
 	if (key == 27) { //esc
@@ -410,10 +494,11 @@ void InitGL(int argc, char** argv, Scene::scenes currentScene)
 
 }
 
-GameObject::GameObject(LineData positions)
+GameObject::GameObject(LineData positions, float lineWidth)
 {
 	this->type = GameObject::LINE;
 	this->lineData = positions;
+	this->lineWidth = lineWidth;
 
 	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
@@ -459,6 +544,7 @@ void GameObject::Render()
 	else if (this->type == GameObject::LINE) {
 		glBegin(GL_LINES);
 
+		glLineWidth(this->lineWidth);
 		glColor3f(this->color.x, this->color.y, this->color.z);
 
 		glVertex3f(this->lineData.firstPoint.x, -this->lineData.firstPoint.y, 0);
@@ -514,9 +600,6 @@ void GameObject::Render()
 
 		glColor3f(this->color.x, this->color.y, this->color.z);
 
-		//_A.x + _Perpendicular.x * _Radius, _A.y + _Perpendicular.y * _Radius , 0.0f,        1.0f, 1.0f, 1.0f,  0.0f, 0.0f,// Top - Left
-		//_A.x - _Perpendicular.x * _Radius, _A.y - _Perpendicular.y * _Radius, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,// Bot - Left
-
 		Vector3 Perpendicular = findPerpendicular(this->capsuleData.circle1.centerPoint, this->capsuleData.circle2.centerPoint);
 
 		//topleft
@@ -529,7 +612,7 @@ void GameObject::Render()
 		glVertex3f(this->capsuleData.circle2.centerPoint.x - Perpendicular.x * this->capsuleData.circle2.radius, this->capsuleData.circle2.centerPoint.y - Perpendicular.y * this->capsuleData.circle2.radius, 0.0f);
 		//bottomright
 		glVertex3f(this->capsuleData.circle2.centerPoint.x + Perpendicular.x * this->capsuleData.circle2.radius, this->capsuleData.circle2.centerPoint.y + Perpendicular.y * this->capsuleData.circle2.radius, 0.0f);
-		//bottomright
+		//bottomleft?
 		glVertex3f(this->capsuleData.circle1.centerPoint.x + Perpendicular.x * this->capsuleData.circle1.radius, this->capsuleData.circle1.centerPoint.y + Perpendicular.y * this->capsuleData.circle1.radius, 0.0f);
 
 		glEnd();

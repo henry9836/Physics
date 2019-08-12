@@ -7,6 +7,7 @@
 #include <gtc/matrix_transform.hpp>
 #include <gtc/type_ptr.hpp>
 #include <ft2build.h>
+#include <limits>
 
 #include "ConsoleController.h"
 #include "ShaderLoader.h"
@@ -25,7 +26,7 @@ public:
 		CAPSULE
 	};
 	
-	GameObject(LineData positions); //line
+	GameObject(LineData positions, float lineWidth); //line
 	GameObject(TriangleData positions); //triangle
 	GameObject(CircleData inCircle1, CircleData inCircle2); //capsule
 	~GameObject();
@@ -38,7 +39,9 @@ public:
 	LineData lineData;
 	TriangleData triangleData;
 	CapsuleData capsuleData;
+
 	bool killMe = false;
+	float lineWidth = 1.0f;
 
 private:
 
