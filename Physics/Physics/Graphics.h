@@ -58,7 +58,8 @@ public:
 	enum scenes {
 		TRIANGLE,
 		CAPSULE,
-		PIT
+		PIT,
+		PITB
 	};
 	vector<GameObject*> GameObjects;
 	scenes currentScene = TRIANGLE;

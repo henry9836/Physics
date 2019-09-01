@@ -152,3 +152,17 @@ bool PointInTriangle(glm::vec2 pt, glm::vec2 v1, glm::vec2 v2, glm::vec2 v3)
 
 	return !(has_neg && has_pos);
 }
+
+bool PointInTriangleBarycentric(glm::vec2 pt, glm::vec2 v1, glm::vec2 v2, glm::vec2 v3) {
+
+	float a = ((v2.y - v3.y) * (pt.x - v3.x) + (v3.x - v2.x) * (pt.y - v3.y)) / ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
+	float b = ((v3.y - v1.y) * (pt.x - v3.x) + (v1.x - v3.x) * (pt.y - v3.y)) / ((v2.y - v3.y) * (v1.x - v3.x) + (v3.x - v2.x) * (v1.y - v3.y));
+	float c = 1 - a - b;
+
+	// p lies in T if and only if 0 <= a <= 1 and 0 <= b <= 1 and 0 <= c <= 1
+
+	if (((0<=a)&&(a<=1))&&((0<=b)&&(b<=1))&&((0<=c)&&(c<=1))) {
+		return true;
+	}
+	return false;
+}

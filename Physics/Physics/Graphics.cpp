@@ -311,7 +311,7 @@ void mouse(int button, int state, int x, int y) { //Click
 					mScene.GameObjects.push_back(new GameObject(ThirdCircle, FourthCircle));
 				}
 			}
-			else if (mScene.currentScene == Scene::PIT) {
+			else if (mScene.currentScene == Scene::PIT || mScene.currentScene == Scene::PITB) {
 				if (Triangle.firstPoint.x == -9999) {
 					Triangle.firstPoint.x = MousePosition.x;
 					Triangle.firstPoint.y = MousePosition.y;
@@ -340,11 +340,21 @@ void mouse(int button, int state, int x, int y) { //Click
 					mScene.GameObjects.push_back(new GameObject(point));
 					wcout << L"Point Made" << endl;
 
-					if (PointInTriangle(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
-						Console_OutputLog(L"POINT IS INSIDE TRIANGLE", LOGINFO);
+					if (mScene.currentScene == Scene::PIT) {
+						if (PointInTriangle(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
+							Console_OutputLog(L"POINT IS INSIDE TRIANGLE", LOGINFO);
+						}
+						else {
+							Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE", LOGINFO);
+						}
 					}
 					else {
-						Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE", LOGINFO);
+						if (PointInTriangleBarycentric(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
+							Console_OutputLog(L"POINT IS INSIDE TRIANGLE B", LOGINFO);
+						}
+						else {
+							Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE B", LOGINFO);
+						}
 					}
 				}
 
