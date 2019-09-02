@@ -156,7 +156,7 @@ void javelin() {
 	glm::vec3 tmpRes;
 	if (t < 0) {
 		t *= -1;
-		int max = t;
+		int max = (int)t;
 		t = 1;
 		while (t <= max) {
 			glm::vec3 oldRes = tmpRes;
@@ -274,7 +274,7 @@ glm::vec2 getProj(vector<glm::vec3> shape, glm::vec3 axis) {
 	double min = dotproduct(axisTmp, tmp);
 	double max = min;
 
-	for (int i = 1; i < shape.size(); i++) {
+	for (unsigned int i = 1; i < shape.size(); i++) {
 		// NOTE: the axis must be normalized to get accurate projections
 		Vector3 tmp = Vector3(shape.at(i).x, shape.at(i).y, shape.at(i).z);
 		Vector3 axisTmp = Vector3(axis.x, axis.y, axis.z);
