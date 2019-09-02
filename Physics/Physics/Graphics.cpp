@@ -6,6 +6,7 @@ IntVector2 ScreenSize = {500,500};
 Vector2 MousePosition;
 TriangleData Triangle;
 LineData Line;
+PointData point;
 CircleData FirstCircle;
 CircleData SecondCircle;
 CircleData ThirdCircle;
@@ -310,6 +311,44 @@ void mouse(int button, int state, int x, int y) { //Click
 					mScene.GameObjects.push_back(new GameObject(ThirdCircle, FourthCircle));
 				}
 			}
+			else if (mScene.currentScene == Scene::PIT) {
+				if (Triangle.firstPoint.x == -9999) {
+					Triangle.firstPoint.x = MousePosition.x;
+					Triangle.firstPoint.y = MousePosition.y;
+					wcout << L"Set first point for triangle at: " << Triangle.firstPoint.x << ":" << Triangle.firstPoint.y << endl;
+				}
+				else if (Triangle.secondPoint.x == -9999) {
+					Triangle.secondPoint.x = MousePosition.x;
+					Triangle.secondPoint.y = MousePosition.y;
+					wcout << L"Set second point for triangle at: " << Triangle.secondPoint.x << ":" << Triangle.secondPoint.y << endl;
+				}
+				else if (Triangle.thirdPoint.x == -9999) {
+					Triangle.thirdPoint.x = MousePosition.x;
+					Triangle.thirdPoint.y = MousePosition.y;
+					wcout << L"Set third point for triangle at: " << Triangle.thirdPoint.x << ":" << Triangle.thirdPoint.y << endl;
+
+					mScene.GameObjects.push_back(new GameObject(Triangle));
+					wcout << L"Triangle Made" << endl;
+				}
+				else if (point.data.x == -9999) {
+					point.data.x = MousePosition.x;
+					point.data.y = MousePosition.y;
+
+					wcout << L"Set point at: " << point.data.x << ":" << point.data.y << endl;
+
+					mScene.GameObjects.push_back(new GameObject(point));
+					wcout << L"Point Made" << endl;
+
+					if (PointInTriangle(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
+						Console_OutputLog(L"POINT IS INSIDE TRIANGLE", LOGINFO);
+					}
+					else {
+						Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE", LOGINFO);
+					}
+				}
+
+
+			}
 		}
 
 	}
@@ -446,6 +485,21 @@ void Update() {
 	Render();
 }
 
+void ResetObjects() {
+	FirstCircle.centerPoint.x = -9999;
+	SecondCircle.centerPoint.x = -9999;
+	ThirdCircle.centerPoint.x = -9999;
+	FourthCircle.centerPoint.x = -9999;
+	FirstCircle.radius = -9999;
+	SecondCircle.radius = -9999;
+	ThirdCircle.radius = -9999;
+	FourthCircle.radius = -9999;
+	Triangle.firstPoint.x = -9999;
+	Triangle.thirdPoint.x = -9999;
+	Triangle.secondPoint.x = -9999;
+	point.data.x = -9999;
+}
+
 void InitGL(int argc, char** argv, Scene::scenes currentScene)
 {
 
@@ -461,15 +515,8 @@ void InitGL(int argc, char** argv, Scene::scenes currentScene)
 		i--;
 	}
 
-	FirstCircle.centerPoint.x = -9999;
-	SecondCircle.centerPoint.x = -9999;
-	ThirdCircle.centerPoint.x = -9999;
-	FourthCircle.centerPoint.x = -9999;
-	FirstCircle.radius = -9999;
-	SecondCircle.radius = -9999;
-	ThirdCircle.radius = -9999;
-	FourthCircle.radius = -9999;
-
+	ResetObjects();
+		
 	//Start OpenGL
 
 	srand(static_cast <unsigned> (time(0)));
@@ -531,6 +578,15 @@ GameObject::GameObject(TriangleData positions)
 	
 	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 
+}
+
+GameObject::GameObject(PointData _point)
+{
+	this->type = GameObject::POINT;
+
+	this->pointData = _point;
+
+	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
 
 GameObject::GameObject(CircleData inCircle1, CircleData inCircle2)
@@ -637,6 +693,19 @@ void GameObject::Render()
 		glVertex3f(this->capsuleData.circle1.centerPoint.x + Perpendicular.x * this->capsuleData.circle1.radius, this->capsuleData.circle1.centerPoint.y + Perpendicular.y * this->capsuleData.circle1.radius, 0.0f);
 
 		glEnd();
+	}
+	else if (this->type == GameObject::POINT) {
+		glPointSize(10.0f);
+		glBegin(GL_POINTS);
+		
+		glColor3f(this->color.x, this->color.y, this->color.z);
+		
+		glVertex3f(point.data.x, -point.data.y, point.data.z);
+
+		glEnd();
+	}
+	else {
+		Console_OutputLog(L"Render Function Not Set!", LOGINFO);
 	}
 }
 

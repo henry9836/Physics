@@ -5,7 +5,7 @@
 void MainMenu(int argc, char** argv) {
 	Console_Clear();
 	string input = "";
-	wcout << L" ░▒▓ Physics Main Menu ▓▒░\n ~ Henry Oliver\n\n[Options]\n 1. Lagrange's Formula\n 2. Plane vs Point Function\n 3. Line Segment vs Plane Function\n 4. Triangle vs Plane Function\n 5. Triangle Cutter\n 6. 2D Capsule vs 2D Capsule\n 99. Exit\nPlease Select An Option: " << endl;
+	wcout << L" ░▒▓ Physics Main Menu ▓▒░\n ~ Henry Oliver\n\n[Options]\n 1. Lagrange's Formula\n 2. Plane vs Point Function\n 3. Line Segment vs Plane Function\n 4. Triangle vs Plane Function\n 5. Triangle Cutter\n 6. 2D Capsule vs 2D Capsule\n 7. Javelin throw\n 8. Point in a Triangle\n 99. Exit\nPlease Select An Option: " << endl;
 	cin >> input;
 	if (input == "1") {
 		LagrangeSolver();
@@ -119,6 +119,12 @@ void MainMenu(int argc, char** argv) {
 	}
 	else if (input == "6") {
 		InitGL(argc, argv, Scene::CAPSULE);
+	}
+	else if (input == "7") {
+		javelin();
+	}
+	else if (input == "8") {
+		InitGL(argc, argv, Scene::PIT);
 	}
 	else if (input == "99") {
 		exit(0);
