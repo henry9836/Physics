@@ -24,13 +24,16 @@ public:
 		TRIANGLE,
 		LINE,
 		CAPSULE,
-		POINT
+		POINT,
+		LETTERI,
+		LETTERO
 	};
 	
 	GameObject(LineData positions, float lineWidth); //line
 	GameObject(TriangleData positions); //triangle
 	GameObject(PointData _point); //triangle
 	GameObject(CircleData inCircle1, CircleData inCircle2); //capsule
+	GameObject(objectType letter, glm::vec3 pos); // letters
 	~GameObject();
 	objectType type;
 	

@@ -334,6 +334,7 @@ void mouse(int button, int state, int x, int y) { //Click
 
 					point.data.x = MousePosition.x;
 					point.data.y = MousePosition.y;
+					point.data.z = -0.5f;
 
 					wcout << L"Set point at: " << point.data.x << ":" << point.data.y << endl;
 
@@ -343,17 +344,21 @@ void mouse(int button, int state, int x, int y) { //Click
 					if (mScene.currentScene == Scene::PIT) {
 						if (PointInTriangle(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
 							Console_OutputLog(L"POINT IS INSIDE TRIANGLE", LOGINFO);
+							mScene.GameObjects.push_back(new GameObject(GameObject::LETTERI, glm::vec3(0.7f, -0.9f, -0.9f)));
 						}
 						else {
 							Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE", LOGINFO);
+							mScene.GameObjects.push_back(new GameObject(GameObject::LETTERO, glm::vec3(0.7f, -0.9f, -0.9f)));
 						}
 					}
 					else {
 						if (PointInTriangleBarycentric(glm::vec2(point.data.x, point.data.y), glm::vec2(Triangle.firstPoint.x, Triangle.firstPoint.y), glm::vec2(Triangle.secondPoint.x, Triangle.secondPoint.y), glm::vec2(Triangle.thirdPoint.x, Triangle.thirdPoint.y))) {
 							Console_OutputLog(L"POINT IS INSIDE TRIANGLE B", LOGINFO);
+							mScene.GameObjects.push_back(new GameObject(GameObject::LETTERI, glm::vec3(0.7f, -0.9f, -0.9f)));
 						}
 						else {
 							Console_OutputLog(L"POINT IS NOT INSIDE TRIANGLE B", LOGINFO);
+							mScene.GameObjects.push_back(new GameObject(GameObject::LETTERO, glm::vec3(0.7f, -0.9f, -0.9f)));
 						}
 					}
 				}
@@ -610,6 +615,14 @@ GameObject::GameObject(CircleData inCircle1, CircleData inCircle2)
 	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
 
+GameObject::GameObject(objectType letter, glm::vec3 pos)
+{
+	this->type = letter;
+	this->pointData.data.x = pos.x;
+	this->pointData.data.y = pos.y;
+	this->pointData.data.z = pos.z;
+}
+
 GameObject::~GameObject()
 {
 }
@@ -645,17 +658,9 @@ void GameObject::Render()
 
 		//Draw Circles
 
-		//Console_OutputLog(L"DRAW A CAPSULE", LOGINFO);
-
 		glBegin(GL_TRIANGLE_FAN);
 
 		glColor3f(this->color.x, this->color.y, this->color.z);
-
-		//wcout << "Center Position: " << this->capsuleData.circle1.centerPoint.x << " : " << this->capsuleData.circle1.centerPoint.y << " " << endl;
-
-		//wcout << "Position: " << (this->capsuleData.circle1.centerPoint.x + std::cos(angle) * this->capsuleData.circle1.radius) << " : " << (this->capsuleData.circle1.centerPoint.y + std::sin(angle) * this->capsuleData.circle1.radius) << " r: " << this->capsuleData.circle1.radius << " Angle: " << angle << " " << endl;
-
-		//wcout << "Position: " << (this->capsuleData.circle2.centerPoint.x + std::cos(angle) * this->capsuleData.circle2.radius) << " : " << (this->capsuleData.circle2.centerPoint.y + std::sin(angle) * this->capsuleData.circle2.radius) << " r: " << this->capsuleData.circle2.radius << " Angle: " << angle << " " << endl;
 
 		glVertex3f(this->capsuleData.circle1.centerPoint.x, this->capsuleData.circle1.centerPoint.y, 0.0f);
 
@@ -713,6 +718,59 @@ void GameObject::Render()
 		
 		glVertex3f(point.data.x, -point.data.y, point.data.z);
 
+		glEnd();
+	}
+	else if (this->type == GameObject::LETTERI) {
+		glm::vec3 orgin = glm::vec3(this->pointData.data.x, this->pointData.data.y, this->pointData.data.z);
+
+		glLineWidth(10.0f);
+		
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		//Bottom Line
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x, orgin.y, orgin.z);
+		glVertex3f(orgin.x+0.2f, orgin.y, orgin.z);
+		glEnd();
+		//Middle Line
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x+0.1f, orgin.y, orgin.z);
+		glVertex3f(orgin.x + 0.1f, orgin.y+0.4f, orgin.z);
+		glEnd();
+		//Top Line
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x, orgin.y + 0.4f, orgin.z);
+		glVertex3f(orgin.x + 0.2f, orgin.y + 0.4f, orgin.z);
+		glEnd();
+
+		
+	}
+	else if (this->type == GameObject::LETTERO) {
+		glm::vec3 orgin = glm::vec3(this->pointData.data.x, this->pointData.data.y, this->pointData.data.z);
+
+		glLineWidth(10.0f);
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		//bottom
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x, orgin.y, orgin.z);
+		glVertex3f(orgin.x + 0.2f, orgin.y, orgin.z);
+		glEnd();
+		//right
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x + 0.2f, orgin.y, orgin.z);
+		glVertex3f(orgin.x + 0.2f, orgin.y+0.2f, orgin.z);
+		glEnd();
+		//top
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x, orgin.y + 0.2f, orgin.z);
+		glVertex3f(orgin.x + 0.2f, orgin.y + 0.2f, orgin.z);
+		glEnd();
+		//left
+		glBegin(GL_LINES);
+		glVertex3f(orgin.x, orgin.y + 0.2f, orgin.z);
+		glVertex3f(orgin.x, orgin.y, orgin.z);
 		glEnd();
 	}
 	else {
