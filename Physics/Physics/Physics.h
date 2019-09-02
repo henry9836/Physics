@@ -23,6 +23,8 @@ Vector3 findPerpendicular(Vector3 pointA, Vector3 pointB);
 
 void javelin();
 
+void cannonAimer();
+
 bool PointInTriangle(glm::vec2 pt, glm::vec2 v1, glm::vec2 v2, glm::vec2 v3);
 
 bool PointInTriangleBarycentric(glm::vec2 pt, glm::vec2 v1, glm::vec2 v2, glm::vec2 v3);

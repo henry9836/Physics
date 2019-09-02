@@ -1,5 +1,7 @@
 #include "Physics.h"
 
+#define PI 3.141592654f
+
 float dotproduct(Vector3 VECA, Vector3 VECB)
 {
 	float product = 0;
@@ -127,9 +129,106 @@ Vector3 findPerpendicular(Vector3 pointA, Vector3 pointB) {
 	return Vector3(dir.x/length,dir.y/length,dir.z);
 }
 
+glm::vec3 javeLogic(float _angle, float _speed, float _t) {
+	glm::vec3 result; //x,y pos, z angle
+
+	float throwAngleRadians = (_angle * PI) / 180.0f;
+
+	result.x = _t * _speed * cos(throwAngleRadians);
+	result.y = _t * _speed * sin(throwAngleRadians) - (0.5f * 9.8f * powf(_t, 2));
+	result.z = ((atanf(result.x/result.y)) * 180.0f) / PI;
+
+	return result;
+}
+
 void javelin() {
 	Console_Clear();
+	
+	float angle, speed, t;
 	wcout << " -= Javelin Throw Calculator =- " << endl;
+
+	wcout << L" Throw Angle: ";
+	cin >> angle;
+	wcout << L" Throw Speed: ";
+	cin >> speed;
+	wcout << L" Time (-X for steps from start): ";
+	cin >> t;
+	glm::vec3 tmpRes;
+	if (t < 0) {
+		t *= -1;
+		int max = t;
+		t = 1;
+		while (t <= max) {
+			glm::vec3 oldRes = tmpRes;
+			glm::vec3 tmpRes = javeLogic(angle, speed, t);
+			if (oldRes != tmpRes) {
+				wcout << "--------------------------" << endl << "Time: " << t << endl;
+				wcout << "Result: Javelin is at Position(x|y): " << tmpRes.x << "|" << tmpRes.y << " at an angle of: " << tmpRes.z << "Degrees" << endl;
+				t++;
+			}
+			else {
+				break;
+			}
+		}
+
+	}
+	else {
+		tmpRes = javeLogic(angle, speed, t);
+		wcout << "Result: Javelin is at Position(x|y): " << tmpRes.x << "|" << tmpRes.y << " at an angle of: " << tmpRes.z << "Degrees" << endl;
+	}
+
+}
+
+bool aboveTarget(float _length, float _angle, float _speed, glm::vec2 _target)
+{
+	float tAngle = (_angle * PI) / 180.0f;
+	float time, rX, rY, h;
+	rX = _length * cosf(tAngle);
+	rY = _length * sinf(tAngle);
+
+	time = ((_target.x - rX) / ((_speed)* cosf(tAngle)));
+	h = rY + (_speed * sinf(tAngle)) * time + (0.5f * -9.8f * powf(time, 2));
+	if (h > _target.y)
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+
+void cannonAimer() {
+
+	float cannonLength, MuzzleSpeed;
+	glm::vec2 target;
+
+	wcout << " -= Cannon Aimer =- " << endl;
+	wcout << " Cannon Length: ";
+	cin >> cannonLength;
+	wcout << " Muzzle Speed: ";
+	cin >> MuzzleSpeed;
+	wcout << " Target X Position: ";
+	cin >> target.x;
+	wcout << " Target Y Position: ";
+	cin >> target.y;
+
+	float result = -9999;
+
+	for (int i = -900; i <= 900; i++)
+	{
+		if (aboveTarget(cannonLength, float(i) / 10, MuzzleSpeed, target))
+		{
+			result = float(i) / 10;
+			break;
+		}
+	}
+
+	if (result == -9999) {
+		wcout << "Error: Could not find a valid firing angle!" << endl;
+	}
+	else {
+		wcout << "Firing Angle: " << result << " Degrees" << endl;
+	}
 
 }
 
