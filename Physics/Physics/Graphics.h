@@ -23,11 +23,13 @@ public:
 		UNDEFINIED,
 		TRIANGLE,
 		LINE,
-		CAPSULE
+		CAPSULE,
+		POINT
 	};
 	
 	GameObject(LineData positions, float lineWidth); //line
 	GameObject(TriangleData positions); //triangle
+	GameObject(PointData _point); //triangle
 	GameObject(CircleData inCircle1, CircleData inCircle2); //capsule
 	~GameObject();
 	objectType type;
@@ -39,6 +41,7 @@ public:
 	LineData lineData;
 	TriangleData triangleData;
 	CapsuleData capsuleData;
+	PointData pointData;
 
 	bool killMe = false;
 	float lineWidth = 1.0f;
@@ -54,7 +57,8 @@ class Scene {
 public:
 	enum scenes {
 		TRIANGLE,
-		CAPSULE
+		CAPSULE,
+		PIT
 	};
 	vector<GameObject*> GameObjects;
 	scenes currentScene = TRIANGLE;

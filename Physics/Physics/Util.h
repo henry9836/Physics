@@ -89,3 +89,7 @@ struct CapsuleData {
 	CircleData circle1;
 	CircleData circle2;
 };
+
+struct PointData {
+	Vector3 data = { -9999, -9999, 0 };
+};
