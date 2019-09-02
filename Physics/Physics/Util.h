@@ -1,4 +1,5 @@
 #pragma once
+#include <glm.hpp>
 
 struct Vector3 {
 	float x = 0.0f;
@@ -92,4 +93,12 @@ struct CapsuleData {
 
 struct PointData {
 	Vector3 data = { -9999, -9999, 0 };
+};
+
+struct FivePointShape {
+	glm::vec3 firstPoint = glm::vec3(-9999,-9999,0);
+	glm::vec3 secondPoint = glm::vec3(-9999, -9999, 0);
+	glm::vec3 thirdPoint = glm::vec3(-9999, -9999, 0);
+	glm::vec3 fourthPoint = glm::vec3(-9999, -9999, 0);
+	glm::vec3 fifthPoint = glm::vec3(-9999, -9999, 0);
 };

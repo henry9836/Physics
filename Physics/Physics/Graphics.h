@@ -26,7 +26,8 @@ public:
 		CAPSULE,
 		POINT,
 		LETTERI,
-		LETTERO
+		LETTERO,
+		FIVESHAPE
 	};
 	
 	GameObject(LineData positions, float lineWidth); //line
@@ -34,6 +35,7 @@ public:
 	GameObject(PointData _point); //triangle
 	GameObject(CircleData inCircle1, CircleData inCircle2); //capsule
 	GameObject(objectType letter, glm::vec3 pos); // letters
+	GameObject(FivePointShape _fiveshapeData); //shape
 	~GameObject();
 	objectType type;
 	
@@ -45,6 +47,7 @@ public:
 	TriangleData triangleData;
 	CapsuleData capsuleData;
 	PointData pointData;
+	FivePointShape fiveshapeData;
 
 	bool killMe = false;
 	float lineWidth = 1.0f;
@@ -62,7 +65,8 @@ public:
 		TRIANGLE,
 		CAPSULE,
 		PIT,
-		PITB
+		PITB,
+		SAT
 	};
 	vector<GameObject*> GameObjects;
 	scenes currentScene = TRIANGLE;

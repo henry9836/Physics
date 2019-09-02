@@ -11,8 +11,35 @@ CircleData FirstCircle;
 CircleData SecondCircle;
 CircleData ThirdCircle;
 CircleData FourthCircle;
+FivePointShape fivePointShapeOne;
+FivePointShape fivePointShapeTwo;
 
 bool mouseDisable = false; //helps against double click
+
+void ResetObjects() {
+	FirstCircle.centerPoint.x = -9999;
+	SecondCircle.centerPoint.x = -9999;
+	ThirdCircle.centerPoint.x = -9999;
+	FourthCircle.centerPoint.x = -9999;
+	FirstCircle.radius = -9999;
+	SecondCircle.radius = -9999;
+	ThirdCircle.radius = -9999;
+	FourthCircle.radius = -9999;
+	Triangle.firstPoint.x = -9999;
+	Triangle.thirdPoint.x = -9999;
+	Triangle.secondPoint.x = -9999;
+	point.data.x = -9999;
+	fivePointShapeOne.firstPoint.x = -9999;
+	fivePointShapeOne.secondPoint.x = -9999;
+	fivePointShapeOne.thirdPoint.x = -9999;
+	fivePointShapeOne.fourthPoint.x = -9999;
+	fivePointShapeOne.fifthPoint.x = -9999;
+	fivePointShapeTwo.firstPoint.x = -9999;
+	fivePointShapeTwo.secondPoint.x = -9999;
+	fivePointShapeTwo.thirdPoint.x = -9999;
+	fivePointShapeTwo.fourthPoint.x = -9999;
+	fivePointShapeTwo.fifthPoint.x = -9999;
+}
 
 void drawLineCapsuleDistance(CapsuleData capsule1, CapsuleData capsule2) {
 	float shortestDistance = 999999;
@@ -365,6 +392,61 @@ void mouse(int button, int state, int x, int y) { //Click
 
 
 			}
+			else if (mScene.currentScene == Scene::SAT){
+				MousePosition.y = -MousePosition.y;
+				if (fivePointShapeOne.firstPoint.x == -9999) {
+					fivePointShapeOne.firstPoint.x = MousePosition.x;
+					fivePointShapeOne.firstPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeOne.firstPoint.x << ":" << fivePointShapeOne.firstPoint.y << endl;
+				}
+				else if (fivePointShapeOne.secondPoint.x == -9999) {
+					fivePointShapeOne.secondPoint.x = MousePosition.x;
+					fivePointShapeOne.secondPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeOne.secondPoint.x << ":" << fivePointShapeOne.secondPoint.y << endl;
+				}
+				else if (fivePointShapeOne.thirdPoint.x == -9999) {
+					fivePointShapeOne.thirdPoint.x = MousePosition.x;
+					fivePointShapeOne.thirdPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeOne.thirdPoint.x << ":" << fivePointShapeOne.thirdPoint.y << endl;
+				}
+				else if (fivePointShapeOne.fourthPoint.x == -9999) {
+					fivePointShapeOne.fourthPoint.x = MousePosition.x;
+					fivePointShapeOne.fourthPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeOne.fourthPoint.x << ":" << fivePointShapeOne.fourthPoint.y << endl;
+				}
+				else if (fivePointShapeOne.fifthPoint.x == -9999) {
+					fivePointShapeOne.fifthPoint.x = MousePosition.x;
+					fivePointShapeOne.fifthPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeOne.fifthPoint.x << ":" << fivePointShapeOne.fifthPoint.y << endl;
+					mScene.GameObjects.push_back(new GameObject(fivePointShapeOne));
+				}
+				else if (fivePointShapeTwo.firstPoint.x == -9999) {
+					fivePointShapeTwo.firstPoint.x = MousePosition.x;
+					fivePointShapeTwo.firstPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeTwo.firstPoint.x << ":" << fivePointShapeTwo.firstPoint.y << endl;
+				}
+				else if (fivePointShapeTwo.secondPoint.x == -9999) {
+					fivePointShapeTwo.secondPoint.x = MousePosition.x;
+					fivePointShapeTwo.secondPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeTwo.secondPoint.x << ":" << fivePointShapeTwo.secondPoint.y << endl;
+				}
+				else if (fivePointShapeTwo.thirdPoint.x == -9999) {
+					fivePointShapeTwo.thirdPoint.x = MousePosition.x;
+					fivePointShapeTwo.thirdPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeTwo.thirdPoint.x << ":" << fivePointShapeTwo.thirdPoint.y << endl;
+				}
+				else if (fivePointShapeTwo.fourthPoint.x == -9999) {
+					fivePointShapeTwo.fourthPoint.x = MousePosition.x;
+					fivePointShapeTwo.fourthPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeTwo.fourthPoint.x << ":" << fivePointShapeTwo.fourthPoint.y << endl;
+				}
+				else if (fivePointShapeTwo.fifthPoint.x == -9999) {
+					fivePointShapeTwo.fifthPoint.x = MousePosition.x;
+					fivePointShapeTwo.fifthPoint.y = MousePosition.y;
+					wcout << L"Set point for shape at: " << fivePointShapeTwo.fifthPoint.x << ":" << fivePointShapeTwo.fifthPoint.y << endl;
+					mScene.GameObjects.push_back(new GameObject(fivePointShapeTwo));
+				}
+			}
 		}
 
 	}
@@ -442,14 +524,7 @@ void keyboard(unsigned char key, int, int) {
 				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
 				i--;
 			}
-			FirstCircle.centerPoint.x = -9999;
-			SecondCircle.centerPoint.x = -9999;
-			ThirdCircle.centerPoint.x = -9999;
-			FourthCircle.centerPoint.x = -9999;
-			FirstCircle.radius = -9999;
-			SecondCircle.radius = -9999;
-			ThirdCircle.radius = -9999;
-			FourthCircle.radius = -9999;
+			ResetObjects();
 		}
 		else if (key == 13 || key == 32) {
 			CapsuleData tmp1, tmp2;
@@ -475,6 +550,17 @@ void keyboard(unsigned char key, int, int) {
 		}
 		//wcout << key << endl;
 	}
+	else if (mScene.currentScene == Scene::PIT || mScene.currentScene == Scene::PITB || mScene.currentScene == Scene::SAT) {
+		if (key == 114 || key == 82) { //r to reset
+			for (size_t i = 0; i < mScene.GameObjects.size(); i++)
+			{
+				mScene.GameObjects.at(i)->~GameObject();
+				mScene.GameObjects.erase(mScene.GameObjects.begin() + i);
+				i--;
+			}
+			ResetObjects();
+		}
+	}
 	if (key == 27) { //esc
 		Console_OutputLog(L"Exitting OpenGL...", LOGINFO);
 		glutLeaveMainLoop();
@@ -499,21 +585,6 @@ void Render() {
 
 void Update() {
 	Render();
-}
-
-void ResetObjects() {
-	FirstCircle.centerPoint.x = -9999;
-	SecondCircle.centerPoint.x = -9999;
-	ThirdCircle.centerPoint.x = -9999;
-	FourthCircle.centerPoint.x = -9999;
-	FirstCircle.radius = -9999;
-	SecondCircle.radius = -9999;
-	ThirdCircle.radius = -9999;
-	FourthCircle.radius = -9999;
-	Triangle.firstPoint.x = -9999;
-	Triangle.thirdPoint.x = -9999;
-	Triangle.secondPoint.x = -9999;
-	point.data.x = -9999;
 }
 
 void InitGL(int argc, char** argv, Scene::scenes currentScene)
@@ -621,6 +692,14 @@ GameObject::GameObject(objectType letter, glm::vec3 pos)
 	this->pointData.data.x = pos.x;
 	this->pointData.data.y = pos.y;
 	this->pointData.data.z = pos.z;
+}
+
+GameObject::GameObject(FivePointShape _fiveshapeData)
+{
+	this->type = GameObject::FIVESHAPE;
+	this->fiveshapeData = _fiveshapeData;
+
+	this->color = Vector3{ (float)(rand() % 255) / 255  , (float)(rand() % 255) / 255, (float)(rand() % 255) / 255 };
 }
 
 GameObject::~GameObject()
@@ -771,6 +850,18 @@ void GameObject::Render()
 		glBegin(GL_LINES);
 		glVertex3f(orgin.x, orgin.y + 0.2f, orgin.z);
 		glVertex3f(orgin.x, orgin.y, orgin.z);
+		glEnd();
+	}
+	else if (this->type == GameObject::FIVESHAPE){
+		glColor3f(this->color.x, this->color.y, this->color.z);
+		glBegin(GL_TRIANGLE_FAN);
+
+		glVertex3f(this->fiveshapeData.firstPoint.x, this->fiveshapeData.firstPoint.y, this->fiveshapeData.firstPoint.z);
+		glVertex3f(this->fiveshapeData.secondPoint.x, this->fiveshapeData.secondPoint.y, this->fiveshapeData.secondPoint.z);
+		glVertex3f(this->fiveshapeData.thirdPoint.x, this->fiveshapeData.thirdPoint.y, this->fiveshapeData.thirdPoint.z);
+		glVertex3f(this->fiveshapeData.fourthPoint.x, this->fiveshapeData.fourthPoint.y, this->fiveshapeData.fourthPoint.z);
+		glVertex3f(this->fiveshapeData.fifthPoint.x, this->fiveshapeData.fifthPoint.y, this->fiveshapeData.fifthPoint.z);
+
 		glEnd();
 	}
 	else {
