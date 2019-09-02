@@ -166,3 +166,104 @@ bool PointInTriangleBarycentric(glm::vec2 pt, glm::vec2 v1, glm::vec2 v2, glm::v
 	}
 	return false;
 }
+
+glm::vec2 getProj(vector<glm::vec3> shape, glm::vec3 axis) {
+	
+	Vector3 tmp = Vector3(shape.at(0).x, shape.at(0).y, shape.at(0).z);
+	Vector3 axisTmp = Vector3(axis.x, axis.y, axis.z);
+
+	double min = dotproduct(axisTmp, tmp);
+	double max = min;
+
+	for (int i = 1; i < shape.size(); i++) {
+		// NOTE: the axis must be normalized to get accurate projections
+		Vector3 tmp = Vector3(shape.at(i).x, shape.at(i).y, shape.at(i).z);
+		Vector3 axisTmp = Vector3(axis.x, axis.y, axis.z);
+		double p = dotproduct(axisTmp, tmp);
+		if (p < min) {
+			min = p;
+		}
+		else if (p > max) {
+			max = p;
+		}
+	}
+
+
+	glm::vec2 proj = glm::vec2(min, max);
+
+	return proj;
+}
+
+bool SAT(FivePointShape shape1, FivePointShape shape2) {
+
+	vector<glm::vec3> s1;
+	vector<glm::vec3> s2;
+	vector<glm::vec3> axis1;
+	vector<glm::vec3> axis2;
+
+	s1.push_back(shape1.firstPoint);
+	s1.push_back(shape1.secondPoint);
+	s1.push_back(shape1.thirdPoint);
+	s1.push_back(shape1.fourthPoint);
+	s1.push_back(shape1.fifthPoint);
+	s2.push_back(shape2.firstPoint);
+	s2.push_back(shape2.secondPoint);
+	s2.push_back(shape2.thirdPoint);
+	s2.push_back(shape2.fourthPoint);
+	s2.push_back(shape2.fifthPoint);
+
+
+	for (size_t i = 0; i < s1.size()-1; i++)
+	{
+		glm::vec3 p1 = s1[i];
+		glm::vec3 p2 = s1[i + 1];
+
+		glm::vec3 edge = p1 - p2;
+
+		glm::vec3 normal = glm::vec3(edge.y, -edge.x, edge.z);
+
+		axis1.push_back(normal);
+	}
+
+	for (size_t i = 0; i < s2.size() - 1; i++)
+	{
+		glm::vec3 p1 = s2[i];
+		glm::vec3 p2 = s2[i + 1];
+
+		glm::vec3 edge = p1 - p2;
+
+		glm::vec3 normal = glm::vec3(edge.y, -edge.x, edge.z);
+
+		axis2.push_back(normal);
+	}
+
+	for (size_t i = 0; i < axis1.size(); i++)
+	{
+		glm::vec3 axis = axis1[i];
+
+		//project both shapes
+		glm::vec2 proj1 = getProj(s1, axis);
+		glm::vec2 proj2 = getProj(s2, axis);
+
+		//if we do not overlap return false
+		if ((proj1.x > proj2.y) ||(proj2.x > proj1.y)) {
+			return false;
+		}
+	}
+
+	for (size_t i = 0; i < axis2.size(); i++)
+	{
+		glm::vec3 axis = axis2[i];
+
+		//project both shapes
+		glm::vec2 proj1 = getProj(s1, axis);
+		glm::vec2 proj2 = getProj(s2, axis);
+
+		//if we do not overlap return false
+		if ((proj1.x > proj2.y) || (proj2.x > proj1.y)) {
+			return false;
+		}
+	}
+
+	return true; //collision detected
+}

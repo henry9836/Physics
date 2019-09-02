@@ -445,6 +445,17 @@ void mouse(int button, int state, int x, int y) { //Click
 					fivePointShapeTwo.fifthPoint.y = MousePosition.y;
 					wcout << L"Set point for shape at: " << fivePointShapeTwo.fifthPoint.x << ":" << fivePointShapeTwo.fifthPoint.y << endl;
 					mScene.GameObjects.push_back(new GameObject(fivePointShapeTwo));
+
+					//solve
+
+					if (SAT(fivePointShapeOne, fivePointShapeTwo)) {
+						Console_OutputLog(L"Colliding", LOGINFO);
+						mScene.GameObjects.push_back(new GameObject(GameObject::LETTERI, glm::vec3(0.7f, -0.9f, -0.9f)));
+					}
+					else {
+						Console_OutputLog(L"Not Colliding", LOGINFO);
+						mScene.GameObjects.push_back(new GameObject(GameObject::LETTERN, glm::vec3(0.7f, -0.9f, -0.9f)));
+					}
 				}
 			}
 		}
@@ -851,6 +862,29 @@ void GameObject::Render()
 		glVertex3f(orgin.x, orgin.y + 0.2f, orgin.z);
 		glVertex3f(orgin.x, orgin.y, orgin.z);
 		glEnd();
+	}
+	else if (this->type == GameObject::LETTERN) {
+	glm::vec3 orgin = glm::vec3(this->pointData.data.x, this->pointData.data.y, this->pointData.data.z);
+
+	glLineWidth(10.0f);
+
+	glColor3f(1.0f, 1.0f, 1.0f);
+
+	//right
+	glBegin(GL_LINES);
+	glVertex3f(orgin.x + 0.2f, orgin.y, orgin.z);
+	glVertex3f(orgin.x + 0.2f, orgin.y + 0.3f, orgin.z);
+	glEnd();
+	//top
+	glBegin(GL_LINES);
+	glVertex3f(orgin.x, orgin.y + 0.3f, orgin.z);
+	glVertex3f(orgin.x + 0.2f, orgin.y + 0.3f, orgin.z);
+	glEnd();
+	//left
+	glBegin(GL_LINES);
+	glVertex3f(orgin.x, orgin.y + 0.3f, orgin.z);
+	glVertex3f(orgin.x, orgin.y, orgin.z);
+	glEnd();
 	}
 	else if (this->type == GameObject::FIVESHAPE){
 		glColor3f(this->color.x, this->color.y, this->color.z);

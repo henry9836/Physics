@@ -27,6 +27,7 @@ public:
 		POINT,
 		LETTERI,
 		LETTERO,
+		LETTERN,
 		FIVESHAPE
 	};
 	
