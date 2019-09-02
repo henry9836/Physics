@@ -331,6 +331,7 @@ void mouse(int button, int state, int x, int y) { //Click
 					wcout << L"Triangle Made" << endl;
 				}
 				else if (point.data.x == -9999) {
+
 					point.data.x = MousePosition.x;
 					point.data.y = MousePosition.y;
 
